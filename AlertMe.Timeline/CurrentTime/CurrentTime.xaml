@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="AlertMe.Timeline.CurrentTime.CurrentTime"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AlertMe.Timeline.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:TimelineProgressVisibilityConverter x:Key="progressVisibility" />
+    </UserControl.Resources>
+    <Grid 
+        Name="LayoutRoot"
+        Visibility="{Binding PercentagePassed, Converter={StaticResource progressVisibility}, UpdateSourceTrigger=PropertyChanged}"
+        Margin="{Binding LeftMargin}"
+        VerticalAlignment="Stretch">
+        <Rectangle
+            HorizontalAlignment="Left"
+            Margin="0 25 0 0"
+            Width="4"
+            Fill="Black"
+            />
+    </Grid>
+</UserControl>

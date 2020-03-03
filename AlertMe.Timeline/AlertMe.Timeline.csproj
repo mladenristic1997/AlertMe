@@ -48,17 +48,38 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AlertCheckpoint\AlertCheckpoint.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="CurrentTime\CurrentTime.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Timeline.xaml">
+    <Page Include="Timeline\Timeline.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlertCheckpoint\AlertCheckpoint.cs" />
+    <Compile Include="AlertCheckpoint\AlertCheckpoint.xaml.cs">
+      <DependentUpon>AlertCheckpoint.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AlertCheckpoint\AlertCheckpointViewModel.cs" />
     <Compile Include="Converters\BorderHeightValueConverter.cs" />
+    <Compile Include="Converters\TimelineProgressVisibilityConverter.cs" />
+    <Compile Include="CurrentTime\CurrentTime.cs" />
+    <Compile Include="CurrentTime\CurrentTime.xaml.cs">
+      <DependentUpon>CurrentTime.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CurrentTime\CurrentTimeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -72,8 +93,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Timeline.xaml.cs">
+    <Compile Include="Timeline\Alert.cs" />
+    <Compile Include="Timeline\Timeline.cs" />
+    <Compile Include="Timeline\Timeline.xaml.cs">
       <DependentUpon>Timeline.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -84,5 +108,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

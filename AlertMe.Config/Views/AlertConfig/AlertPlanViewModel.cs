@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+//using AlertMe.Timeline;
+using Alert = AlertMe.Domain.Alert;
 
 namespace AlertMe.Plans
 {
@@ -18,6 +20,8 @@ namespace AlertMe.Plans
         public DelegateCommand AddNewAlert { get; set; }
         public DelegateCommand Save { get; set; }
         public DelegateCommand Delete { get; set; }
+
+        //public ObservableCollection<Timeline.Alert> TimelineAlerts { get; set; }
         
         public string Id { get; set; }
 
@@ -40,11 +44,12 @@ namespace AlertMe.Plans
             Save = new DelegateCommand(OnSave);
             Delete = new DelegateCommand(OnDelete);
             Alerts = new ObservableCollection<Control>();
-            EventAggregator.GetEvent<AlertChanged>().Subscribe(OnConfigChanged);
+            //TimelineAlerts = new ObservableCollection<Timeline.Alert>();
+            EventAggregator.GetEvent<AlertChanged>().Subscribe(OnAlertChanged);
             EventAggregator.GetEvent<RemoveAlert>().Subscribe(OnRemoveAlert);
         }
 
-        void OnConfigChanged(AlertChangedArgs args)
+        void OnAlertChanged(AlertChangedArgs args)
         {
             foreach (var alert in Alerts)
             {
@@ -96,7 +101,7 @@ namespace AlertMe.Plans
         {
             if (MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.Yes) 
                 return;
-            EventAggregator.GetEvent<AlertChanged>().Unsubscribe(OnConfigChanged);
+            EventAggregator.GetEvent<AlertChanged>().Unsubscribe(OnAlertChanged);
             EventAggregator.GetEvent<RemoveAlert>().Unsubscribe(OnRemoveAlert);
             EventAggregator.GetEvent<DeleteAlertPlan>().Publish(new DeleteAlertPlanArgs { Id = Id });
         }

@@ -59,7 +59,7 @@
             Orientation="Horizontal">
             <TextBox 
                 Margin="15"
-                Text="{Binding ConfigName,UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding ConfigName, UpdateSourceTrigger=PropertyChanged}"
                 FontSize="24"
                 MinWidth="200"
             />
@@ -67,6 +67,9 @@
                 Padding="10 0"
                 Command="{Binding Save}"
                 Height="34"
+                Background="Green"
+                BorderThickness="0"
+                Foreground="White"
                 >Save</Button>
         </StackPanel>
 

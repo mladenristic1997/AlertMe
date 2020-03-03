@@ -20,7 +20,7 @@
             Height="Auto"
             TextWrapping="WrapWithOverflow"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Alert.Hours}"
+            Text="{Binding Alert.Hours, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 
@@ -34,7 +34,7 @@
             TextWrapping="WrapWithOverflow"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Alert.Minutes}"
+            Text="{Binding Alert.Minutes, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 
@@ -48,7 +48,7 @@
             TextWrapping="WrapWithOverflow"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Alert.Seconds}"
+            Text="{Binding Alert.Seconds, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 
@@ -73,7 +73,7 @@
             Height="Auto"
             TextWrapping="WrapWithOverflow"
             Margin="5 0"
-            Text="{Binding Alert.Message}"
+            Text="{Binding Alert.Message, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <Button 
