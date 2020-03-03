@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using AlertMe.Domain;
+using Prism.Events;
 
 namespace AlertMe.Config.Events
 {
@@ -8,6 +9,6 @@ namespace AlertMe.Config.Events
 
     public class AlertChangedArgs
     {
-        public string Id { get; set; }
+        public Alert Alert { get; set; } 
     }
 }

@@ -88,6 +88,7 @@ namespace AlertMe.Config
 
         void OnSaveConfig(AlertConfig config)
         {
+            //delete by using id not name
             foreach (var cfg in Configs)
             {
                 var vm = cfg.Config.DataContext as AlertConfigViewModel;
@@ -105,6 +106,7 @@ namespace AlertMe.Config
 
         void OnDeleteConfig(DeleteAlertConfigArgs args)
         {
+            //also delete from stored alert configs
             foreach (var config in Configs)
             {
                 var vm = config.Config.DataContext as AlertConfigViewModel;

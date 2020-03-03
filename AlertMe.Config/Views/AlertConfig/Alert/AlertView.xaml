@@ -73,8 +73,7 @@
             Height="Auto"
             TextWrapping="WrapWithOverflow"
             Margin="5 0"
-            PreviewTextInput="NumberValidation"
-            Text="{Binding Alert.Seconds}"
+            Text="{Binding Alert.Message}"
             />
 
         <Button 

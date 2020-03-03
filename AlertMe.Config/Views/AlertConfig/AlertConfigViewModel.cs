@@ -49,7 +49,7 @@ namespace AlertMe.Config
             foreach (var alert in Alerts)
             {
                 var vm = alert.DataContext as AlertViewModel;
-                if (vm.Id == args.Id)
+                if (vm.Id == args.Alert.Id)
                 { 
                     //Left to implement timeline bar
                 }

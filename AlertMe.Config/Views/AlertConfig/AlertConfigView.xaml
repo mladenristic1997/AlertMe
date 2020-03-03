@@ -54,8 +54,9 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-
-        <StackPanel Orientation="Horizontal">
+        <StackPanel 
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
             <TextBox 
                 Margin="15"
                 Text="{Binding ConfigName,UpdateSourceTrigger=PropertyChanged}"

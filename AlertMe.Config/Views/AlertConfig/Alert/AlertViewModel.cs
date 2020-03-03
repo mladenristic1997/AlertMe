@@ -58,7 +58,7 @@ namespace AlertMe.Config
 
         void NotifyChange()
         {
-            EventAggregator.GetEvent<AlertChanged>().Publish(new AlertChangedArgs { Id = Id });
+            EventAggregator.GetEvent<AlertChanged>().Publish(new AlertChangedArgs { Alert = Alert });
         }
     }
 }
