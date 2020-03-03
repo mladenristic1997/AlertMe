@@ -33,7 +33,7 @@ namespace AlertMe.Domain
 
         static string GetFilePath<T>()
         {
-            var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe";
+            var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/AlertMe";
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
 
@@ -60,16 +60,18 @@ namespace AlertMe.Domain
 
         public void RemoveObject(string fileName)
         {
-            string path = GetFilePath(fileName);
-            File.Delete(path);
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/AlertMe/" + fileName;
+            var directory = new DirectoryInfo(path) { Attributes = FileAttributes.Normal };
+            foreach (var childInfo in directory.GetFileSystemInfos())
+                childInfo.Delete();
+            directory.Delete();
         }
 
         static string GetFilePath(string fileName)
         {
-            var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe";
+            var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/AlertMe/" + fileName;
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
-
             var filename = $"{fileName}.json";
             string path = $"{folder}/{filename}";
             return path;

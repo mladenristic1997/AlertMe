@@ -11,7 +11,8 @@
              WindowStartupLocation="CenterScreen"
              d:DesignHeight="450" d:DesignWidth="800">
         <TabControl
-            BorderThickness="0"
+            BorderThickness="0 0.7 0 0"
+            BorderBrush="Gray"
             Margin="0"
             Padding="0">
             <TabControl.ItemContainerStyle>

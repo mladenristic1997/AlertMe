@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="AlertMe.Timeline.Timeline"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:AlertMe.Timeline.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:BorderHeightValueConverter x:Key="borderHeightConv" />
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Canvas
+            Name="TimelineCanvas"
+            MinHeight="100"
+            MinWidth="800"
+            >
+            <Border
+                Width="{Binding ElementName=TimelineCanvas, Path=ActualWidth}"
+                Height="{Binding ElementName=TimelineCanvas, Path=ActualHeight, Converter={StaticResource borderHeightConv}, UpdateSourceTrigger=PropertyChanged}">
+            </Border>
+        </Canvas>
+    </Grid>
+</UserControl>
