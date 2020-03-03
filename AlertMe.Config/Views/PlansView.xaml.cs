@@ -1,5 +1,5 @@
-﻿using AlertMe.Config.Commands;
-using AlertMe.Config.Events;
+﻿using AlertMe.Plans.Commands;
+using AlertMe.Plans.Events;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -16,21 +16,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AlertMe.Config
+namespace AlertMe.Plans
 {
     /// <summary>
     /// Interaction logic for ConfigView.xaml
     /// </summary>
-    public partial class ConfigView : UserControl
+    public partial class PlansView : UserControl
     {
         readonly IEventAggregator EventAggregator;
 
-        public ConfigView(IEventAggregator ea)
+        public PlansView(IEventAggregator ea)
         {
             EventAggregator = ea;
             InitializeComponent();
-            EventAggregator.GetEvent<AlertConfigAdded>().Subscribe(UpdateComboBox);
-            EventAggregator.GetEvent<DeleteAlertConfig>().Subscribe(OnDeleteConfig);
+            EventAggregator.GetEvent<AlertPlanAdded>().Subscribe(UpdateComboBox);
+            EventAggregator.GetEvent<PlansLoaded>().Subscribe(OnPlansLoaded);
+            EventAggregator.GetEvent<DeleteAlertPlan>().Subscribe(OnDeleteConfig);
+            EventAggregator.GetEvent<LoadPlans>().Publish();
         }
 
         void UpdateComboBox()
@@ -38,7 +40,12 @@ namespace AlertMe.Config
             AlertConfigs.SelectedIndex = AlertConfigs.Items.Count - 1;
         }
 
-        void OnDeleteConfig(DeleteAlertConfigArgs e)
+        void OnPlansLoaded()
+        {
+            AlertConfigs.SelectedIndex = AlertConfigs.Items.Count > 0 ? 0 : -1;
+        }
+
+        void OnDeleteConfig(DeleteAlertPlanArgs e)
         {
             AlertConfigs.SelectedIndex = AlertConfigs.Items.Count > 0 ? 0 : -1;
         }

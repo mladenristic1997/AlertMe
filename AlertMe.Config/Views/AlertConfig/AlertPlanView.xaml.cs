@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AlertMe.Config
+namespace AlertMe.Plans
 {
     /// <summary>
     /// Interaction logic for ConfigView.xaml
     /// </summary>
-    public partial class AlertConfigView : UserControl
+    public partial class AlertPlanView : UserControl
     {
-        public AlertConfigView()
+        public AlertPlanView()
         {
             InitializeComponent();
         }

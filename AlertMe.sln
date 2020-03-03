@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{F2F9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.Home", "AlertMe.Home\AlertMe.Home.csproj", "{335FABF9-A39F-4192-A291-92521AF5BA18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.Config", "AlertMe.Config\AlertMe.Config.csproj", "{C0C3114D-F0F9-403E-88A3-5E5C07EB950C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.Plans", "AlertMe.Config\AlertMe.Plans.csproj", "{C0C3114D-F0F9-403E-88A3-5E5C07EB950C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

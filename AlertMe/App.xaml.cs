@@ -1,5 +1,5 @@
-﻿using AlertMe.Config;
-using AlertMe.Domain;
+﻿using AlertMe.Domain;
+using AlertMe.Plans;
 using CommonServiceLocator;
 using Prism.Events;
 using Prism.Ioc;
@@ -42,7 +42,7 @@ namespace AlertMe
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
-            AddModule(moduleCatalog, typeof(ConfigModule));
+            AddModule(moduleCatalog, typeof(PlansModule));
             base.ConfigureModuleCatalog(moduleCatalog);
         }
 

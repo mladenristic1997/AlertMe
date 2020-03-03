@@ -34,9 +34,9 @@
             <ContentControl 
                 prism:RegionManager.RegionName="{x:Static domain:RegionNames.HomeRegion}" />
         </TabItem>
-        <TabItem Header="Config">
+        <TabItem Header="Plans">
             <ContentControl 
-                prism:RegionManager.RegionName="{x:Static domain:RegionNames.ConfigRegion}" />
+                prism:RegionManager.RegionName="{x:Static domain:RegionNames.PlansRegion}" />
         </TabItem>
     </TabControl>
     

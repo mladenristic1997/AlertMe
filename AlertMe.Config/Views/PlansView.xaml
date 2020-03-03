@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AlertMe.Config.ConfigView"
+﻿<UserControl x:Class="AlertMe.Plans.PlansView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,8 +16,8 @@
             <ComboBox
                 Margin="0 10 20 10"
                 Name="AlertConfigs"
-                ItemsSource="{Binding Configs, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding SelectedConfig, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ItemsSource="{Binding Plans, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedPlan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="{Binding}"
                 DisplayMemberPath="Name"
                 Height="38"
@@ -31,10 +31,10 @@
                 FontSize="26"
                 Height="35"
                 MinWidth="200"
-                Text="{Binding NewConfigName}"
+                Text="{Binding NewPlanName}"
                 />
             <Button 
-                Command="{Binding AddNewConfigCommand}"
+                Command="{Binding AddNewPlanCommand}"
                 Margin="10 0 0 0"
                 Cursor="Hand"
                 >
@@ -59,6 +59,6 @@
                 </Button.Template>
             </Button>
         </StackPanel>
-        <ContentControl Content="{Binding SelectedConfig.Config, UpdateSourceTrigger=PropertyChanged}" />
+        <ContentControl Content="{Binding SelectedPlan.Plan, UpdateSourceTrigger=PropertyChanged}" />
     </StackPanel>
 </UserControl>

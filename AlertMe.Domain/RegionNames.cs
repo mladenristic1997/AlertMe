@@ -3,6 +3,6 @@
     public static class RegionNames
     {
         public const string HomeRegion = "HomeRegion";
-        public const string ConfigRegion = "ConfigRegion";
+        public const string PlansRegion = "PlansRegion";
     }
 }

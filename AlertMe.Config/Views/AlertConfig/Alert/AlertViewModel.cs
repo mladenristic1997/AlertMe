@@ -1,5 +1,5 @@
-﻿using AlertMe.Config.Commands;
-using AlertMe.Config.Events;
+﻿using AlertMe.Plans.Commands;
+using AlertMe.Plans.Events;
 using AlertMe.Domain;
 using Prism.Commands;
 using Prism.Events;
@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AlertMe.Config
+namespace AlertMe.Plans
 {
     public class AlertViewModel : BindableBase
     {

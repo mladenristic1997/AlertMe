@@ -1,5 +1,5 @@
-﻿using AlertMe.Config.Commands;
-using AlertMe.Config.Events;
+﻿using AlertMe.Plans.Commands;
+using AlertMe.Plans.Events;
 using AlertMe.Domain;
 using Prism.Commands;
 using Prism.Events;
@@ -9,9 +9,9 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AlertMe.Config
+namespace AlertMe.Plans
 {
-    public class AlertConfigViewModel : BindableBase
+    public class AlertPlanViewModel : BindableBase
     {
         readonly IEventAggregator EventAggregator;
 
@@ -33,7 +33,7 @@ namespace AlertMe.Config
 
         public ObservableCollection<Control> Alerts { get; set; }
 
-        public AlertConfigViewModel(IEventAggregator ea)
+        public AlertPlanViewModel(IEventAggregator ea)
         {
             EventAggregator = ea;
             AddNewAlert = new DelegateCommand(OnAddNewAlert);
@@ -77,8 +77,8 @@ namespace AlertMe.Config
 
         void OnSave()
         {
-            var config = new AlertConfig { Id = Id, Name = ConfigName, Alerts = GetAlertObjects() };
-            EventAggregator.GetEvent<SaveConfig>().Publish(config);
+            var config = new AlertPlan { Id = Id, Name = ConfigName, Alerts = GetAlertObjects() };
+            EventAggregator.GetEvent<SaveAlertPlan>().Publish(config);
         }
 
             List<Alert> GetAlertObjects()
@@ -98,7 +98,7 @@ namespace AlertMe.Config
                 return;
             EventAggregator.GetEvent<AlertChanged>().Unsubscribe(OnConfigChanged);
             EventAggregator.GetEvent<RemoveAlert>().Unsubscribe(OnRemoveAlert);
-            EventAggregator.GetEvent<DeleteAlertConfig>().Publish(new DeleteAlertConfigArgs { Id = Id });
+            EventAggregator.GetEvent<DeleteAlertPlan>().Publish(new DeleteAlertPlanArgs { Id = Id });
         }
     }
 }

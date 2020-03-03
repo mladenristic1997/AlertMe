@@ -120,9 +120,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlertMe.Config\AlertMe.Config.csproj">
+    <ProjectReference Include="..\AlertMe.Config\AlertMe.Plans.csproj">
       <Project>{C0C3114D-F0F9-403E-88A3-5E5C07EB950C}</Project>
-      <Name>AlertMe.Config</Name>
+      <Name>AlertMe.Plans</Name>
     </ProjectReference>
     <ProjectReference Include="..\AlertMe.Domain\AlertMe.Domain.csproj">
       <Project>{5195ACDB-584E-4AD0-828D-5397C91DE425}</Project>

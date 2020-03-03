@@ -1,7 +1,7 @@
 ﻿using AlertMe.Domain;
 using Prism.Events;
 
-namespace AlertMe.Config.Events
+namespace AlertMe.Plans.Events
 {
     public class AlertChanged : PubSubEvent<AlertChangedArgs>
     {

@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AlertMe.Config
+namespace AlertMe.Plans
 {
     /// <summary>
     /// Interaction logic for AlertConfigView.xaml

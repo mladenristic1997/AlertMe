@@ -3,13 +3,13 @@ using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 
-namespace AlertMe.Config
+namespace AlertMe.Plans
 {
-    public class ConfigModule : IModule
+    public class PlansModule : IModule
     {
         IRegionManager RegionManager;
 
-        public ConfigModule(IRegionManager regionManager)
+        public PlansModule(IRegionManager regionManager)
         {
             RegionManager = regionManager;
         }
@@ -20,7 +20,7 @@ namespace AlertMe.Config
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            RegionManager.RegisterViewWithRegion(RegionNames.ConfigRegion, typeof(ConfigView));
+            RegionManager.RegisterViewWithRegion(RegionNames.PlansRegion, typeof(PlansView));
         }
     }
 }

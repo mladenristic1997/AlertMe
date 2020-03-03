@@ -2,11 +2,11 @@
 
 namespace AlertMe.Plans.Commands
 {
-    public class RemoveAlert : PubSubEvent<RemoveAlertArgs>
+    public class DeleteAlertPlan : PubSubEvent<DeleteAlertPlanArgs>
     {
     }
 
-    public class RemoveAlertArgs
+    public class DeleteAlertPlanArgs
     {
         public string Id { get; set; }
     }
