@@ -18,26 +18,46 @@ namespace AlertMe.Plans
 
         public DelegateCommand Remove { get; set; }
 
-        public List<AlertType> AlertTypes { get; set; }
-
-        AlertType selectedType;
-        public AlertType SelectedType
+        int hours;
+        public int Hours
         {
-            get => selectedType;
-            set 
+            get => hours;
+            set
             {
-                SetProperty(ref selectedType, value);
-                Alert.AlertType = SelectedType;
+                SetProperty(ref hours, value);
+                NotifyChange();
             }
         }
 
-        Alert alert;
-        public Alert Alert
+        int minutes;
+        public int Minutes 
         {
-            get => alert;
-            set 
+            get => minutes;
+            set
             {
-                SetProperty(ref alert, value);
+                SetProperty(ref minutes, value);
+                NotifyChange();
+            }
+        }
+
+        int seconds;
+        public int Seconds
+        {
+            get => seconds;
+            set
+            {
+                SetProperty(ref seconds, value);
+                NotifyChange();
+            }
+        }
+
+        string message;
+        public string Message
+        {
+            get => message;
+            set
+            {
+                SetProperty(ref message, value);
                 NotifyChange();
             }
         }
@@ -45,9 +65,6 @@ namespace AlertMe.Plans
         public AlertViewModel(IEventAggregator ea)
         {
             EventAggregator = ea;
-            AlertTypes = new List<AlertType>();
-            foreach (var at in (AlertType[])Enum.GetValues(typeof(AlertType)))
-                AlertTypes.Add(at);
             Remove = new DelegateCommand(OnRemoveAlert);
         }
 
@@ -58,7 +75,13 @@ namespace AlertMe.Plans
 
         void NotifyChange()
         {
-            EventAggregator.GetEvent<AlertChanged>().Publish(new AlertChangedArgs { Alert = Alert });
+            EventAggregator.GetEvent<AlertChanged>().Publish(new AlertChangedArgs { 
+                Id = Id,
+                Hours = Hours,
+                Minutes = Minutes,
+                Seconds = Seconds,
+                Message = Message
+            });
         }
     }
 }

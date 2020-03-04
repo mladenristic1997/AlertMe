@@ -20,7 +20,7 @@
             Height="Auto"
             TextWrapping="WrapWithOverflow"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Alert.Hours, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 
@@ -34,7 +34,7 @@
             TextWrapping="WrapWithOverflow"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Alert.Minutes, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 
@@ -48,20 +48,8 @@
             TextWrapping="WrapWithOverflow"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Alert.Seconds, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Seconds, UpdateSourceTrigger=PropertyChanged}"
             />
-
-        <TextBlock 
-            FontSize="18"
-            Text="Type: "
-            />
-        <ComboBox
-                Margin="10 0 20 0"
-                ItemsSource="{Binding AlertTypes, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedValuePath="{Binding}"
-                Height="28"
-                FontSize="18"/>
 
         <TextBlock 
             FontSize="18"
@@ -73,7 +61,7 @@
             Height="Auto"
             TextWrapping="WrapWithOverflow"
             Margin="5 0"
-            Text="{Binding Alert.Message, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <Button 

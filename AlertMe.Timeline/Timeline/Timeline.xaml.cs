@@ -20,9 +20,12 @@ namespace AlertMe.Timeline
     /// </summary>
     public partial class Timeline : UserControl
     {
+        public TimelineViewModel ViewModel { get; set; }
         public Timeline()
         {
+            ViewModel = new TimelineViewModel();
             InitializeComponent();
+            TimelineControl.DataContext = ViewModel;
         }
     }
 }

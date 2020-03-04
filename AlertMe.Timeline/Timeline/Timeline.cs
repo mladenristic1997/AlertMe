@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace AlertMe.Timeline
@@ -7,21 +7,63 @@ namespace AlertMe.Timeline
     public partial class Timeline
     {
         public static readonly DependencyProperty AlertsProperty =
-            DependencyProperty.Register("Alerts", typeof(IList<Alert>), typeof(Timeline), new PropertyMetadata(default(IList<Alert>)));
+            DependencyProperty.Register("Alerts", typeof(ObservableCollection<Alert>), typeof(Timeline), new FrameworkPropertyMetadata()
+            {
+                PropertyChangedCallback = OnAlertsChanged,
+            });
 
-        public IList<Alert> Alerts
+        static void OnAlertsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get => (IList<Alert>)GetValue(AlertsProperty);
+            var vm = d as Timeline;
+            vm.ViewModel.Alerts = (ObservableCollection<Alert>)e.NewValue;
+            vm.ViewModel.UpdateView();
+        }
+
+        public ObservableCollection<Alert> Alerts
+        {
+            get => (ObservableCollection<Alert>)GetValue(AlertsProperty);
             set => SetValue(AlertsProperty, value);
         }
 
-        public static readonly DependencyProperty PercentagePassedProperty =
-            DependencyProperty.Register("PercentagePassed", typeof(double), typeof(Timeline), new PropertyMetadata(default(double)));
 
-        public double PercentagePassed
+
+        public static readonly DependencyProperty ControlWidthProperty =
+            DependencyProperty.Register("PlanDuration", typeof(int), typeof(Timeline), new FrameworkPropertyMetadata()
+            {
+                PropertyChangedCallback = OnControlWidthChanged,
+            });
+
+        static void OnControlWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get => double.Parse(GetValue(PercentagePassedProperty).ToString());
-            set => SetValue(PercentagePassedProperty, value);
+            var vm = d as Timeline;
+            vm.ViewModel.ControlWidth = Convert.ToInt32(e.NewValue);
+        }
+
+        public int ControlWidth
+        {
+            get => int.Parse(GetValue(ControlWidthProperty).ToString());
+            set => SetValue(ControlWidthProperty, value);
+        }
+
+
+
+
+        public static readonly DependencyProperty PlanDurationProperty =
+            DependencyProperty.Register("PlanDuration", typeof(int), typeof(Timeline), new FrameworkPropertyMetadata()
+            {
+                PropertyChangedCallback = OnPlanDurationChanged,
+            });
+
+        static void OnPlanDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var vm = d as Timeline;
+            vm.ViewModel.PlanDuration = Convert.ToInt32(e.NewValue);
+        }
+
+        public int PlanDuration
+        {
+            get => int.Parse(GetValue(PlanDurationProperty).ToString());
+            set => SetValue(PlanDurationProperty, value);
         }
     }
 }

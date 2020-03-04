@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Alert.cs" />
     <Compile Include="AlertPlan.cs" />
-    <Compile Include="AlertType.cs" />
     <Compile Include="IdProvider.cs" />
     <Compile Include="LocalDataStore.cs" />
     <Compile Include="RegionNames.cs" />

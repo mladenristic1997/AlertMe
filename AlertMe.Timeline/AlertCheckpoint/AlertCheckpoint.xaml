@@ -11,7 +11,7 @@
         Height="Auto"
         MouseEnter="LayoutRoot_MouseEnter"
         MouseLeave="LayoutRoot_MouseLeave"
-        Margin="{Binding LeftMargin}"
+        Margin="{Binding Margin}"
         HorizontalAlignment="Center"
         VerticalAlignment="Stretch">
         <TextBlock
@@ -52,6 +52,7 @@
                 <TextBlock 
                     FontSize="22"
                     Padding="6"
+                    Text="{Binding Message}"
                     />
             </Border>
         </Grid>

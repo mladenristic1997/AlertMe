@@ -1,9 +1,26 @@
 ﻿namespace AlertMe.Timeline
 {
-    public class Alert
+    public class Alert : BindableBase
     {
-        public string Message { get; set; }
-        public string AlertAt { get; set; }
-        public double PercentagePosition { get; set; }
+        string id;
+        public string Id
+        {
+            get => id;
+            set => SetProperty(ref id, value);
+        }
+
+        string message;
+        public string Message
+        {
+            get => message;
+            set => SetProperty(ref message, value);
+        }
+
+        int totalSeconds;
+        public int TotalSeconds
+        {
+            get => totalSeconds;
+            set => SetProperty(ref totalSeconds, value);
+        }
     }
 }

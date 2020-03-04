@@ -6,6 +6,28 @@ namespace AlertMe.Timeline.AlertCheckpoint
 {
     public partial class AlertCheckpoint : UserControl
     {
+        public static readonly DependencyProperty IdProperty =
+            DependencyProperty.Register("Id", typeof(string), typeof(AlertCheckpoint), new FrameworkPropertyMetadata()
+            {
+                PropertyChangedCallback = OnIdChanged,
+                BindsTwoWayByDefault = false,
+            });
+
+        static void OnIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var vm = d as AlertCheckpoint;
+            vm.ViewModel.Id = e.NewValue.ToString();
+        }
+
+        public string Id
+        {
+            get => GetValue(IdProperty).ToString();
+            set => SetValue(IdProperty, value);
+        }
+
+
+
+
         public static readonly DependencyProperty AlertAtProperty =
             DependencyProperty.Register("AlertAt", typeof(string), typeof(AlertCheckpoint), new FrameworkPropertyMetadata()
             {
@@ -24,6 +46,8 @@ namespace AlertMe.Timeline.AlertCheckpoint
             get => GetValue(AlertAtProperty).ToString();
             set => SetValue(AlertAtProperty, value);
         }
+
+
 
 
         public static readonly DependencyProperty MessageProperty =
@@ -46,43 +70,25 @@ namespace AlertMe.Timeline.AlertCheckpoint
         }
 
 
-        public static readonly DependencyProperty PercentagePositionProperty =
-            DependencyProperty.Register("PercentagePosition", typeof(double), typeof(AlertCheckpoint), new FrameworkPropertyMetadata()
+
+
+        public static readonly DependencyProperty LeftMarginProperty =
+            DependencyProperty.Register("LeftMargin", typeof(Thickness), typeof(AlertCheckpoint), new FrameworkPropertyMetadata()
             {
-                PropertyChangedCallback = OnPercentagePositionChanged,
+                PropertyChangedCallback = OnLeftMarginChanged,
                 BindsTwoWayByDefault = false,
             });
 
-        static void OnPercentagePositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        static void OnLeftMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var vm = d as AlertCheckpoint;
-            vm.ViewModel.PercentagePosition = Convert.ToDouble(e.NewValue);
+            vm.ViewModel.Margin = (Thickness)e.NewValue;
         }
 
-        public double PercentagePosition
+        public double LeftMargin
         {
-            get => double.Parse(GetValue(PercentagePositionProperty).ToString());
-            set => SetValue(PercentagePositionProperty, value);
-        }
-
-
-        public static readonly DependencyProperty TimelineWidthProperty =
-            DependencyProperty.Register("TimelineWidth", typeof(double), typeof(AlertCheckpoint), new FrameworkPropertyMetadata()
-            {
-                PropertyChangedCallback = OnTimelineWidthChanged,
-                BindsTwoWayByDefault = false
-            });
-
-        static void OnTimelineWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var vm = d as AlertCheckpoint;
-            vm.ViewModel.TimelineWidth = Convert.ToDouble(e.NewValue);
-        }
-
-        public double TimelineWidth
-        {
-            get => double.Parse(GetValue(TimelineWidthProperty).ToString());
-            set => SetValue(TimelineWidthProperty, value);
+            get => double.Parse(GetValue(LeftMarginProperty).ToString());
+            set => SetValue(LeftMarginProperty, value);
         }
     }
 }

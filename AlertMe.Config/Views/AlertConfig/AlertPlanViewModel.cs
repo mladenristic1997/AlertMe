@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-//using AlertMe.Timeline;
 using Alert = AlertMe.Domain.Alert;
+using AlertMe.Timeline;
+using System.Linq;
 
 namespace AlertMe.Plans
 {
@@ -21,17 +22,17 @@ namespace AlertMe.Plans
         public DelegateCommand Save { get; set; }
         public DelegateCommand Delete { get; set; }
 
-        //public ObservableCollection<Timeline.Alert> TimelineAlerts { get; set; }
+        public ObservableCollection<Timeline.Alert> TimelineAlerts { get; set; }
         
         public string Id { get; set; }
 
-        string configName;
-        public string ConfigName
+        string planName;
+        public string PlanName
         {
-            get => configName;
+            get => planName;
             set
             {
-                SetProperty(ref configName, value);
+                SetProperty(ref planName, value);
             }
         }
 
@@ -44,27 +45,27 @@ namespace AlertMe.Plans
             Save = new DelegateCommand(OnSave);
             Delete = new DelegateCommand(OnDelete);
             Alerts = new ObservableCollection<Control>();
-            //TimelineAlerts = new ObservableCollection<Timeline.Alert>();
+            TimelineAlerts = new ObservableCollection<Timeline.Alert>();
             EventAggregator.GetEvent<AlertChanged>().Subscribe(OnAlertChanged);
             EventAggregator.GetEvent<RemoveAlert>().Subscribe(OnRemoveAlert);
         }
 
         void OnAlertChanged(AlertChangedArgs args)
         {
-            foreach (var alert in Alerts)
-            {
-                var vm = alert.DataContext as AlertViewModel;
-                if (vm.Id == args.Alert.Id)
-                { 
-                    //Left to implement timeline bar
-                }
-            }
+            //update percentage positions of all timeline alerts
+            var vms = Alerts.Select(x => x.DataContext as AlertViewModel).ToDictionary(x => x.Id, x => x);
+            var totalTime = vms.Sum(x => CalculateInSeconds(x.Value.Hours, x.Value.Minutes, x.Value.Seconds));
+            foreach (var a in TimelineAlerts)
+                
         }
+
+        int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
 
         void OnAddNewAlert()
         {
             var id = IdProvider.GetId();
-            Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id, Alert = new Alert { Id = id } } });
+            Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id } });
+            TimelineAlerts.Add(new Timeline.Alert { Id = id });
         }
 
         void OnRemoveAlert(RemoveAlertArgs args)
@@ -78,11 +79,19 @@ namespace AlertMe.Plans
                     return;
                 }
             }
+            foreach (var alert in TimelineAlerts)
+            {
+                if (alert.Id == args.Id)
+                {
+                    TimelineAlerts.Remove(alert);
+                    return;
+                }
+            }
         }
 
         void OnSave()
         {
-            var config = new AlertPlan { Id = Id, Name = ConfigName, Alerts = GetAlertObjects() };
+            var config = new AlertPlan { Id = Id, Name = PlanName, Alerts = GetAlertObjects() };
             EventAggregator.GetEvent<SaveAlertPlan>().Publish(config);
         }
 
@@ -92,7 +101,13 @@ namespace AlertMe.Plans
                 foreach (var alert in Alerts)
                 {
                     var vm = alert.DataContext as AlertViewModel;
-                    list.Add(vm.Alert);
+                    list.Add(new Alert { 
+                        Id = vm.Id,
+                        Hours = vm.Hours,
+                        Minutes = vm.Minutes,
+                        Seconds = vm.Seconds,
+                        Message = vm.Message
+                    });
                 }
                 return list;
             }

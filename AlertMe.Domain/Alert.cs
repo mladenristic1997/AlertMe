@@ -7,7 +7,6 @@
         public int Minutes { get; set; }
         public int Seconds { get; set; }
         public string Message { get; set; }
-        public AlertType AlertType { get; set; }
 
         public int CalculateInSeconds() => Hours * 60 * 60 + Minutes * 60 + Seconds;
     }

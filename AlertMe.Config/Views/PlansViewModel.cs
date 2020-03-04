@@ -54,12 +54,19 @@ namespace AlertMe.Plans
                 {
                     var cf = Store.GetObject<AlertPlan>(cfg);
                     var alertsList = new ObservableCollection<Control>();
+                    var timelineAlerts = new ObservableCollection<Timeline.Alert>();
                     foreach (var alert in cf.Alerts)
                     {
-                        var avm = new AlertViewModel(EventAggregator) { Id = alert.Id, Alert = alert };
+                        var avm = new AlertViewModel(EventAggregator) { 
+                            Id = alert.Id,
+                            Hours = alert.Hours,
+                            Minutes = alert.Minutes,
+                            Seconds = alert.Seconds,
+                            Message = alert.Message
+                        };
                         alertsList.Add(new AlertView { DataContext = avm });
                     }
-                    var vm = new AlertPlanViewModel(EventAggregator) { ConfigName = cf.Name, Id = cf.Id, Alerts = alertsList };
+                    var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList };
                     Plans.Add(new DropdownPlan { Name = cf.Name, Plan = new AlertPlanView { DataContext = vm } });
                     EventAggregator.GetEvent<PlansLoaded>().Publish();
                 }
@@ -78,11 +85,11 @@ namespace AlertMe.Plans
 
         void AddNewPlan()
         {
-            var vm = new AlertPlanViewModel(EventAggregator) { Id = IdProvider.GetId(), ConfigName = NewPlanName };
+            var vm = new AlertPlanViewModel(EventAggregator) { Id = IdProvider.GetId(), PlanName = NewPlanName };
             vm.AddNewAlert.Execute();
             var v = new AlertPlanView { DataContext = vm };
-            var config = new DropdownPlan { Plan = v, Name = NewPlanName };
-            Plans.Add(config);
+            var plan = new DropdownPlan { Plan = v, Name = NewPlanName };
+            Plans.Add(plan);
             NewPlanName = "";
             EventAggregator.GetEvent<AlertPlanAdded>().Publish();
         }

@@ -8,55 +8,39 @@
              xmlns:conv="clr-namespace:AlertMe.Timeline.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="boolToVis" />
-    </UserControl.Resources>
     <Grid 
-        Name="TimelineControl"
         MinHeight="100"
         MinWidth="800"
         HorizontalAlignment="Stretch" 
         VerticalAlignment="Stretch">
         <Border
-            Name="TimelineBorder"
             BorderBrush="Black"
-            BorderThickness="1"
-            Width="{Binding ElementName=TimelineControl, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}"
-            Height="{Binding ElementName=TimelineControl, Path=ActualHeight, UpdateSourceTrigger=PropertyChanged}">
+            BorderThickness="1">
             <Grid HorizontalAlignment="Stretch">
                 <ListView
-                    ItemsSource="{Binding Alerts, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding AlertCheckpoints, UpdateSourceTrigger=PropertyChanged}"
                     HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Stretch"
                     >
                     <ListView.Template>
                         <ControlTemplate>
-                            <Grid>
+                            <StackPanel Orientation="Horizontal">
                                 <ItemsPresenter />
-                            </Grid>
+                            </StackPanel>
                         </ControlTemplate>
                     </ListView.Template>
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <Grid Background="Transparent" IsEnabled="true" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            </Grid>
+                            <StackPanel Orientation="Horizontal" Background="Transparent" IsEnabled="true" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            </StackPanel>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <!--<alert:AlertCheckpoint 
-                                TimelineWidth="{Binding ElementName=TimelineBorder, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}"
-                                AlertAt="{Binding AlertAt}"
-                                Message="{Binding Message}"
-                                PercentagePosition="{Binding PercentagePosition, , UpdateSourceTrigger=PropertyChanged}"
-                                />-->
+                            <ContentControl Content="{Binding}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <!--<progress:CurrentTime 
-                    TimelineWidth="{Binding ElementName=TimelineBorder, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}"
-                    PercentagePassed="{Binding PercentagePassed, UpdateSourceTrigger=PropertyChanged}"
-                    />-->
             </Grid>
         </Border>
     </Grid>
