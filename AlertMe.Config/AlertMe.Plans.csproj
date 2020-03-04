@@ -109,6 +109,10 @@
       <Project>{5195ACDB-584E-4AD0-828D-5397C91DE425}</Project>
       <Name>AlertMe.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AlertMe.Timeline\AlertMe.Timeline.csproj">
+      <Project>{20AF35AA-A0C4-4AAC-959D-2DE2B422F87F}</Project>
+      <Name>AlertMe.Timeline</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AlertConfig\Alert\AlertView.xaml">

@@ -60,6 +60,19 @@
       <DependentUpon>CurrentTime.xaml</DependentUpon>
     </Compile>
     <Compile Include="CurrentTime\CurrentTimeViewModel.cs" />
+    <Compile Include="DialogService\DialogService.cs" />
+    <Compile Include="DialogService\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MessageBox\MessageBoxView.xaml.cs">
+      <DependentUpon>MessageBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MessageBox\MessageBoxViewModel.cs" />
+    <Compile Include="Progress\Progress.cs" />
+    <Compile Include="Progress\Progress.xaml.cs">
+      <DependentUpon>Progress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Progress\ProgressViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -73,7 +86,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Timeline\Alert.cs" />
+    <Compile Include="Alert.cs" />
     <Compile Include="Timeline\Timeline.cs" />
     <Compile Include="Timeline\Timeline.xaml.cs">
       <DependentUpon>Timeline.xaml</DependentUpon>
@@ -94,6 +107,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CurrentTime\CurrentTime.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogService\DialogWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MessageBox\MessageBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Progress\Progress.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
