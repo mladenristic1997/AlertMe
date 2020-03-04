@@ -57,8 +57,7 @@ namespace AlertMe.Plans
 
         void OnAlertChanged(AlertChangedArgs args)
         {
-            var vms = Alerts.Select(x => x.DataContext as AlertViewModel).ToDictionary(x => x.Id, x => x);
-            var planDuration = vms.Sum(x => CalculateInSeconds(x.Value.Hours, x.Value.Minutes, x.Value.Seconds));
+            UpdatePlanDuration();
             foreach (var a in TimelineAlerts)
                 if (a.Id == args.Id)
                 {
@@ -74,6 +73,7 @@ namespace AlertMe.Plans
             var id = IdProvider.GetId();
             Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id } });
             TimelineAlerts.Add(new Timeline.Alert { Id = id });
+            UpdatePlanDuration();
         }
 
         void OnRemoveAlert(RemoveAlertArgs args)
@@ -95,6 +95,7 @@ namespace AlertMe.Plans
                     return;
                 }
             }
+            UpdatePlanDuration();
         }
 
         void OnSave()
@@ -127,6 +128,12 @@ namespace AlertMe.Plans
             EventAggregator.GetEvent<AlertChanged>().Unsubscribe(OnAlertChanged);
             EventAggregator.GetEvent<RemoveAlert>().Unsubscribe(OnRemoveAlert);
             EventAggregator.GetEvent<DeleteAlertPlan>().Publish(new DeleteAlertPlanArgs { Id = Id });
+        }
+
+        public void UpdatePlanDuration()
+        {
+            var vms = Alerts.Select(x => x.DataContext as AlertViewModel).ToDictionary(x => x.Id, x => x);
+            PlanDuration = vms.Sum(x => CalculateInSeconds(x.Value.Hours, x.Value.Minutes, x.Value.Seconds));
         }
     }
 }

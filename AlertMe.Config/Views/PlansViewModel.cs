@@ -73,7 +73,7 @@ namespace AlertMe.Plans
                         };
                         timelineAlerts.Add(ta);
                     }
-                    var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList, TimelineAlerts = timelineAlerts };
+                    var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList, TimelineAlerts = timelineAlerts, PlanDuration = timelineAlerts.Sum(x => x.TotalSeconds) };
                     Plans.Add(new DropdownPlan { Name = cf.Name, Plan = new AlertPlanView { DataContext = vm } });
                     EventAggregator.GetEvent<PlansLoaded>().Publish();
                 }

@@ -1,4 +1,6 @@
-﻿using AlertMe.Plans.Commands;
+﻿using AlertMe.Domain.Commands;
+using AlertMe.Domain.Events;
+using AlertMe.Plans.Commands;
 using AlertMe.Plans.Events;
 using Prism.Events;
 using System;
