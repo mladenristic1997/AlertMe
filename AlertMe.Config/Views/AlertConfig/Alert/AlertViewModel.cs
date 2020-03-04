@@ -1,12 +1,8 @@
 ﻿using AlertMe.Plans.Commands;
 using AlertMe.Plans.Events;
-using AlertMe.Domain;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AlertMe.Plans
 {

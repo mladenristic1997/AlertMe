@@ -16,14 +16,14 @@ namespace AlertMe.Plans
         readonly IEventAggregator EventAggregator;
         readonly ILocalDataStore Store;
 
+        public DelegateCommand AddNewPlanCommand { get; set; }
+
         string newPlanName;
         public string NewPlanName
         {
             get => newPlanName;
             set => SetProperty(ref newPlanName, value);
         }
-
-        public DelegateCommand AddNewPlanCommand { get; set; }
 
         public ObservableCollection<DropdownPlan> Plans { get; set; }
 
@@ -65,13 +65,23 @@ namespace AlertMe.Plans
                             Message = alert.Message
                         };
                         alertsList.Add(new AlertView { DataContext = avm });
+                        var ta = new Timeline.Alert
+                        {
+                            Id = alert.Id,
+                            Message = alert.Message,
+                            TotalSeconds = CalculateInSeconds(alert.Hours, alert.Minutes, alert.Seconds)
+                        };
+                        timelineAlerts.Add(ta);
                     }
-                    var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList };
+                    var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList, TimelineAlerts = timelineAlerts };
                     Plans.Add(new DropdownPlan { Name = cf.Name, Plan = new AlertPlanView { DataContext = vm } });
                     EventAggregator.GetEvent<PlansLoaded>().Publish();
                 }
             }
         }
+
+            int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
+
 
         void OnAddNewPlan()
         {

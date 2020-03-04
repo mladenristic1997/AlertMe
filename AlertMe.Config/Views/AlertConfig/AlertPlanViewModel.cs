@@ -9,7 +9,6 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using Alert = AlertMe.Domain.Alert;
-using AlertMe.Timeline;
 using System.Linq;
 
 namespace AlertMe.Plans
@@ -21,8 +20,6 @@ namespace AlertMe.Plans
         public DelegateCommand AddNewAlert { get; set; }
         public DelegateCommand Save { get; set; }
         public DelegateCommand Delete { get; set; }
-
-        public ObservableCollection<Timeline.Alert> TimelineAlerts { get; set; }
         
         public string Id { get; set; }
 
@@ -36,7 +33,15 @@ namespace AlertMe.Plans
             }
         }
 
+        int planDuration;
+        public int PlanDuration
+        {
+            get => planDuration;
+            set => SetProperty(ref planDuration, value);
+        }
+
         public ObservableCollection<Control> Alerts { get; set; }
+        public ObservableCollection<Timeline.Alert> TimelineAlerts { get; set; }
 
         public AlertPlanViewModel(IEventAggregator ea)
         {
@@ -52,11 +57,14 @@ namespace AlertMe.Plans
 
         void OnAlertChanged(AlertChangedArgs args)
         {
-            //update percentage positions of all timeline alerts
             var vms = Alerts.Select(x => x.DataContext as AlertViewModel).ToDictionary(x => x.Id, x => x);
-            var totalTime = vms.Sum(x => CalculateInSeconds(x.Value.Hours, x.Value.Minutes, x.Value.Seconds));
+            var planDuration = vms.Sum(x => CalculateInSeconds(x.Value.Hours, x.Value.Minutes, x.Value.Seconds));
             foreach (var a in TimelineAlerts)
-                
+                if (a.Id == args.Id)
+                {
+                    a.Message = args.Message;
+                    a.TotalSeconds = CalculateInSeconds(args.Hours, args.Minutes, args.Seconds);
+                }
         }
 
         int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;

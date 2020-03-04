@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace AlertMe.Timeline
 {
-    public partial class Timeline
+    public partial class Timeline : UserControl
     {
         public static readonly DependencyProperty AlertsProperty =
             DependencyProperty.Register("Alerts", typeof(ObservableCollection<Alert>), typeof(Timeline), new FrameworkPropertyMetadata()
@@ -16,6 +17,8 @@ namespace AlertMe.Timeline
         {
             var vm = d as Timeline;
             vm.ViewModel.Alerts = (ObservableCollection<Alert>)e.NewValue;
+            foreach (var a in vm.ViewModel.Alerts)
+                a.Update = vm.ViewModel.UpdateView;
             vm.ViewModel.UpdateView();
         }
 
