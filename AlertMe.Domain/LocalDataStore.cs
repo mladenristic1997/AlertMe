@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AlertMe.Domain.Events;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -15,6 +16,13 @@ namespace AlertMe.Domain
 
     public class LocalDataStore : ILocalDataStore
     {
+        readonly IEventAggregator EventAggregator;
+
+        public LocalDataStore(IEventAggregator ea)
+        {
+            EventAggregator = ea;
+        }
+
         public T GetObject<T>() where T : class
         {
             string path = GetFilePath<T>();
@@ -29,11 +37,12 @@ namespace AlertMe.Domain
             string path = GetFilePath<T>();
             string json = JsonConvert.SerializeObject(config);
             File.WriteAllText(path, json);
+            EventAggregator.GetEvent<LocalStoreChanged>().Publish();
         }
 
         static string GetFilePath<T>()
         {
-            var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/AlertMe";
+            var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe";
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
 
@@ -56,20 +65,22 @@ namespace AlertMe.Domain
             string path = GetFilePath(fileName);
             string json = JsonConvert.SerializeObject(config);
             File.WriteAllText(path, json);
+            EventAggregator.GetEvent<LocalStoreChanged>().Publish();
         }
 
         public void RemoveObject(string fileName)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/AlertMe/" + fileName;
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + fileName;
             var directory = new DirectoryInfo(path) { Attributes = FileAttributes.Normal };
             foreach (var childInfo in directory.GetFileSystemInfos())
                 childInfo.Delete();
             directory.Delete();
+            EventAggregator.GetEvent<LocalStoreChanged>().Publish();
         }
 
         static string GetFilePath(string fileName)
         {
-            var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/AlertMe/" + fileName;
+            var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + fileName;
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
             var filename = $"{fileName}.json";

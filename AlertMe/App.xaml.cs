@@ -7,11 +7,6 @@ using Prism.Modularity;
 using Prism.Regions;
 using Prism.Unity;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -37,7 +32,7 @@ namespace AlertMe
         {
             containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
             containerRegistry.RegisterSingleton<ILocalDataStore, LocalDataStore>();
-
+            containerRegistry.RegisterInstance(Container.Resolve<DialogService>());
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

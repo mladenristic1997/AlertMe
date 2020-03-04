@@ -38,5 +38,7 @@ namespace AlertMe.Timeline
                 Update?.Invoke();
             }
         }
+
+        public bool IsPassed { get; set; }
     }
 }
