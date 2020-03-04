@@ -20,7 +20,7 @@ namespace AlertMe.Home
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            RegionManager.RegisterViewWithRegion(RegionNames.PlansRegion, typeof(PlansView));
+            RegionManager.RegisterViewWithRegion(RegionNames.PlansRegion, typeof(HomeView));
         }
     }
 }
