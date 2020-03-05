@@ -1,4 +1,5 @@
 ﻿using AlertMe.Domain.Commands;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;

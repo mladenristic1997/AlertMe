@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:alert="clr-namespace:AlertMe.Timeline.AlertCheckpoint"
-             xmlns:progress="clr-namespace:AlertMe.Timeline.CurrentTime"
-             xmlns:conv="clr-namespace:AlertMe.Timeline.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid 
+        Name="TimelineControl"
         MinHeight="110"
         MinWidth="500"
         HorizontalAlignment="Stretch" 
@@ -18,7 +17,7 @@
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch">
                 <ListView
-                    ItemsSource="{Binding AlertCheckpoints, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding AlertCheckpoints, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
                     HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Stretch"
                     >
@@ -37,7 +36,7 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{Binding}" />
+                            <TextBlock>Jebimatersvima</TextBlock>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

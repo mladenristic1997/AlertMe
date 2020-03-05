@@ -20,7 +20,6 @@
             />
             <ComboBox
                 Margin="0 10 20 10"
-                Name="AlertConfigs"
                 ItemsSource="{Binding Plans, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding SelectedPlan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="{Binding}"

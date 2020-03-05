@@ -1,4 +1,5 @@
 ﻿using AlertMe.Domain;
+using AlertMe.Domain.Events;
 using AlertMe.Home.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -28,6 +29,7 @@ namespace AlertMe.Home
             Store = store;
             Plans = new ObservableCollection<DropdownPlan>();
             EventAggregator.GetEvent<LoadPlans>().Subscribe(LoadStoredPlans);
+            EventAggregator.GetEvent<LocalStoreChanged>().Subscribe(LoadStoredPlans);
         }
         
         void LoadStoredPlans()
@@ -35,6 +37,7 @@ namespace AlertMe.Home
             var c = Store.GetObject<StoredAlertPlans>();
             if (c != null)
             {
+                Plans = new ObservableCollection<DropdownPlan>();
                 foreach (var cfg in c.AlertPlans)
                 {
                     var cf = Store.GetObject<AlertPlan>(cfg);

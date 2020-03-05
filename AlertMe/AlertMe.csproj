@@ -128,9 +128,17 @@
       <Project>{5195ACDB-584E-4AD0-828D-5397C91DE425}</Project>
       <Name>AlertMe.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AlertMe.Home\AlertMe.Home.csproj">
+      <Project>{335FABF9-A39F-4192-A291-92521AF5BA18}</Project>
+      <Name>AlertMe.Home</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AlertMe.Shell\AlertMe.Shell.csproj">
       <Project>{04b2c5c5-e445-403d-8f8e-8b763ca73aef}</Project>
       <Name>AlertMe.Shell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AlertMe.SoundRecorder\AlertMe.AlertSoundSelector.csproj">
+      <Project>{06001420-8CEB-473B-BAD3-DC6424D7063B}</Project>
+      <Name>AlertMe.AlertSoundSelector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

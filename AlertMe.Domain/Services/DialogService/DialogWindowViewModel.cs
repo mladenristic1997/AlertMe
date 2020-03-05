@@ -1,4 +1,7 @@
 ﻿using AlertMe.Domain.Commands;
+using Prism.Commands;
+using Prism.Events;
+using Prism.Mvvm;
 
 namespace AlertMe.Domain
 {

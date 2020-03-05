@@ -1,5 +1,6 @@
 ﻿using AlertMe.Domain.Events;
 using Newtonsoft.Json;
+using Prism.Events;
 using System;
 using System.IO;
 

@@ -1,4 +1,5 @@
-﻿using AlertMe.Plans.Commands;
+﻿using AlertMe.Domain.Commands;
+using AlertMe.Plans.Commands;
 using AlertMe.Plans.Events;
 using Prism.Commands;
 using Prism.Events;
@@ -11,8 +12,10 @@ namespace AlertMe.Plans
         readonly IEventAggregator EventAggregator;
 
         public string Id { get; set; }
+        public string PlanId { get; set; }
 
         public DelegateCommand Remove { get; set; }
+        public DelegateCommand OpenSoundSelector { get; set; }
 
         int hours;
         public int Hours
@@ -62,11 +65,17 @@ namespace AlertMe.Plans
         {
             EventAggregator = ea;
             Remove = new DelegateCommand(OnRemoveAlert);
+            OpenSoundSelector = new DelegateCommand(OnOpenSoundSelector);
         }
 
         void OnRemoveAlert()
         {
             EventAggregator.GetEvent<RemoveAlert>().Publish(new RemoveAlertArgs { Id = Id });
+        }
+
+        void OnOpenSoundSelector()
+        {
+            EventAggregator.GetEvent<OpenAlertSoundSelector>().Publish(new OpenAlertSoundSelectorArgs { PlanId = PlanId, AlertId = Id });
         }
 
         void NotifyChange()

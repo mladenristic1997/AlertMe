@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Prism.Mvvm;
+using System.Windows;
 
 namespace AlertMe.Timeline.CurrentTime
 {

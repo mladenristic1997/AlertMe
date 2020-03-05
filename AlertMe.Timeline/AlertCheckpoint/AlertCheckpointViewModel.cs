@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Prism.Mvvm;
+using System.Windows;
 
 namespace AlertMe.Timeline.AlertCheckpoint
 {
@@ -25,11 +26,13 @@ namespace AlertMe.Timeline.AlertCheckpoint
             set => SetProperty(ref alertAt, value);
         }
 
-        Thickness Margin;
+        Thickness margin;
         public Thickness Margin
         {
-            get => marginLeft;
-            set => SetProperty(ref marginLeft, value);
+            get => margin;
+            set => SetProperty(ref margin, value);
         }
+
+        public double LeftMargin { get; set; }
     }
 }

@@ -59,6 +59,7 @@ namespace AlertMe.Plans
                     {
                         var avm = new AlertViewModel(EventAggregator) { 
                             Id = alert.Id,
+                            PlanId = cf.Id,
                             Hours = alert.Hours,
                             Minutes = alert.Minutes,
                             Seconds = alert.Seconds,

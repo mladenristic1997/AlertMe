@@ -8,7 +8,7 @@ namespace AlertMe.Timeline
     public partial class Progress : UserControl
     {
         public static readonly DependencyProperty AlertsProperty =
-            DependencyProperty.Register("Alerts", typeof(ObservableCollection<Alert>), typeof(Timeline), new FrameworkPropertyMetadata()
+            DependencyProperty.Register("Alerts", typeof(ObservableCollection<Alert>), typeof(Progress), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnAlertsChanged,
                 BindsTwoWayByDefault = false,
@@ -34,14 +34,14 @@ namespace AlertMe.Timeline
 
 
         public static readonly DependencyProperty ControlWidthProperty =
-            DependencyProperty.Register("PlanDuration", typeof(int), typeof(Timeline), new FrameworkPropertyMetadata()
+            DependencyProperty.Register("ControlWidth", typeof(int), typeof(Progress), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnControlWidthChanged,
             });
 
         static void OnControlWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var vm = d as Timeline;
+            var vm = d as Progress;
             vm.ViewModel.ControlWidth = Convert.ToInt32(e.NewValue);
         }
 
@@ -55,14 +55,14 @@ namespace AlertMe.Timeline
 
 
         public static readonly DependencyProperty PlanDurationProperty =
-            DependencyProperty.Register("PlanDuration", typeof(int), typeof(Timeline), new FrameworkPropertyMetadata()
+            DependencyProperty.Register("PlanDuration", typeof(int), typeof(Progress), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnPlanDurationChanged,
             });
 
         static void OnPlanDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var vm = d as Timeline;
+            var vm = d as Progress;
             vm.ViewModel.PlanDuration = Convert.ToInt32(e.NewValue);
         }
 

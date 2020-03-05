@@ -4,5 +4,6 @@
     {
         public const string HomeRegion = "HomeRegion";
         public const string PlansRegion = "PlansRegion";
+        public const string SoundRecorderRegion = "SoundRecorderRegion";
     }
 }

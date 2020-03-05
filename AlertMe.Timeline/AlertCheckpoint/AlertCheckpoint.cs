@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace AlertMe.Timeline.AlertCheckpoint
@@ -73,7 +72,7 @@ namespace AlertMe.Timeline.AlertCheckpoint
 
 
         public static readonly DependencyProperty LeftMarginProperty =
-            DependencyProperty.Register("LeftMargin", typeof(Thickness), typeof(AlertCheckpoint), new FrameworkPropertyMetadata()
+            DependencyProperty.Register("LeftMargin", typeof(double), typeof(AlertCheckpoint), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnLeftMarginChanged,
                 BindsTwoWayByDefault = false,
@@ -82,7 +81,7 @@ namespace AlertMe.Timeline.AlertCheckpoint
         static void OnLeftMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var vm = d as AlertCheckpoint;
-            vm.ViewModel.Margin = (Thickness)e.NewValue;
+            vm.ViewModel.Margin = new Thickness(double.Parse(e.NewValue.ToString()), 0, 0, 0);
         }
 
         public double LeftMargin

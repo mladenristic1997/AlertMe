@@ -36,8 +36,13 @@
                 prism:RegionManager.RegionName="{x:Static domain:RegionNames.HomeRegion}" />
         </TabItem>
         <TabItem Header="Plans">
-            <ContentControl 
-                prism:RegionManager.RegionName="{x:Static domain:RegionNames.PlansRegion}" />
+            <Grid>
+                <ContentControl 
+                    prism:RegionManager.RegionName="{x:Static domain:RegionNames.PlansRegion}" />
+                <ContentControl
+                    Panel.ZIndex="1"
+                    prism:RegionManager.RegionName="{x:Static domain:RegionNames.SoundRecorderRegion}" />
+            </Grid>
         </TabItem>
     </TabControl>
     

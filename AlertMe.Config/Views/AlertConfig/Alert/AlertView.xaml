@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="900">
     <StackPanel 
         Height="Auto"
         Width="Auto"
@@ -63,6 +63,16 @@
             Margin="5 0"
             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
             />
+
+        <Button 
+            VerticalAlignment="Center"
+            Margin="20 0"
+            BorderThickness="0"
+            Background="OrangeRed"
+            Cursor="Hand"
+            Command="{Binding OpenSoundSelector}">
+            Find speaker icon!! 
+        </Button>
 
         <Button 
             Height="10"

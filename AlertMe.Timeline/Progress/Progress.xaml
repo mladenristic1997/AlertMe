@@ -97,7 +97,7 @@
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch">
                 <ListView
-                    ItemsSource="{Binding AlertCheckpoints, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding AlertCheckpoints, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
                     HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Stretch"
                     >
@@ -116,7 +116,12 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{Binding}" />
+                            <alert:AlertCheckpoint 
+                                AlertAt="{Binding AlertAt, UpdateSourceTrigger=PropertyChanged}"
+                                Id="{Binding Id, UpdateSourceTrigger=PropertyChanged}"
+                                Message="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
+                                LeftMargin="{Binding LeftMargin, UpdateSourceTrigger=PropertyChanged}"
+                                />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

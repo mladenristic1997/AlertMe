@@ -41,6 +41,7 @@ namespace AlertMe.Plans
         }
 
         public ObservableCollection<Control> Alerts { get; set; }
+
         public ObservableCollection<Timeline.Alert> TimelineAlerts { get; set; }
 
         public AlertPlanViewModel(IEventAggregator ea)
@@ -71,7 +72,7 @@ namespace AlertMe.Plans
         void OnAddNewAlert()
         {
             var id = IdProvider.GetId();
-            Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id } });
+            Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id, PlanId = Id } });
             TimelineAlerts.Add(new Timeline.Alert { Id = id });
             UpdatePlanDuration();
         }
@@ -100,8 +101,8 @@ namespace AlertMe.Plans
 
         void OnSave()
         {
-            var config = new AlertPlan { Id = Id, Name = PlanName, Alerts = GetAlertObjects() };
-            EventAggregator.GetEvent<SaveAlertPlan>().Publish(config);
+            var plan = new AlertPlan { Id = Id, Name = PlanName, Alerts = GetAlertObjects() };
+            EventAggregator.GetEvent<SaveAlertPlan>().Publish(plan);
         }
 
             List<Alert> GetAlertObjects()

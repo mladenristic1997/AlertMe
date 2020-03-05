@@ -31,7 +31,7 @@ namespace AlertMe.Timeline
 
 
         public static readonly DependencyProperty ControlWidthProperty =
-            DependencyProperty.Register("PlanDuration", typeof(int), typeof(Timeline), new FrameworkPropertyMetadata()
+            DependencyProperty.Register("ControlWidth", typeof(int), typeof(Timeline), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnControlWidthChanged,
             });

@@ -1,4 +1,7 @@
 ﻿
+using AlertMe.Timeline.AlertCheckpoint;
+using Prism.Commands;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -77,7 +80,7 @@ namespace AlertMe.Timeline
 
         public ObservableCollection<Alert> Alerts { get; set; }
 
-        public ObservableCollection<AlertCheckpoint.AlertCheckpoint> AlertCheckpoints { get; set; }
+        public ObservableCollection<AlertCheckpointViewModel> AlertCheckpoints { get; set; }
         public Dictionary<int, Alert> AlertTimesInSeconds { get; set; }
 
         string nextMessage;
@@ -99,15 +102,16 @@ namespace AlertMe.Timeline
         public ProgressViewModel()
         {
             Alerts = new ObservableCollection<Alert>();
-            AlertCheckpoints = new ObservableCollection<AlertCheckpoint.AlertCheckpoint>();
+            AlertCheckpoints = new ObservableCollection<AlertCheckpointViewModel>();
             AlertTimesInSeconds = new Dictionary<int, Alert>();
             DialogService = new DialogService();
             Continue = new DelegateCommand(OnContinue);
             Pause = new DelegateCommand(OnPause);
             ReferenceTime = DateTime.Now;
             PausedAt = DateTime.Now;
-            Counter = new Thread(new ThreadStart(async () => await Countdown()));
+            Counter = new Thread(new ThreadStart(Countdown));
             Counter.IsBackground = true;
+            Counter.SetApartmentState(ApartmentState.STA);
             Counter.Name = "ProgressBarCounterThread";
             Counter.Start();
         }
@@ -127,7 +131,7 @@ namespace AlertMe.Timeline
 
         public void UpdateView()
         {
-            var list = new ObservableCollection<AlertCheckpoint.AlertCheckpoint>();
+            var list = new ObservableCollection<AlertCheckpointViewModel>();
             DateTime now = ReferenceTime;
             foreach (var a in Alerts)
             {
@@ -136,10 +140,11 @@ namespace AlertMe.Timeline
                 vm.Id = a.Id;
                 vm.Message = a.Message;
                 vm.AlertAt = now.ToShortTimeString();
-                vm.Margin = CalculateMargin(a.TotalSeconds);
+                vm.LeftMargin = CalculateMargin(a.TotalSeconds);
+                list.Add(vm);
             }
             AlertCheckpoints = list;
-            ProgressMargin = CalculateMargin(SecondsPassed);
+            ProgressMargin = CalculateMarginThickness(SecondsPassed);
         }
 
         public void UpdateNext()
@@ -153,7 +158,8 @@ namespace AlertMe.Timeline
             }
         }
 
-        Thickness CalculateMargin(int time) => new Thickness((ControlWidth * time / PlanDuration) - 14, 0, 0, 0);
+        double CalculateMargin(int time) => (ControlWidth * time / PlanDuration) - 14;
+        Thickness CalculateMarginThickness(int time) => new Thickness((ControlWidth * time / PlanDuration) - 14, 0, 0, 0);
 
         public void AssignAlertTimes()
         {
@@ -166,7 +172,7 @@ namespace AlertMe.Timeline
             }
         }
 
-        async Task Countdown()
+        void Countdown()
         {
             while (true)
             {
@@ -174,7 +180,7 @@ namespace AlertMe.Timeline
                 if (IsOngoing)
                 {
                     SecondsPassed = CurrentTime.Subtract(ReferenceTime).Seconds;
-                    ProgressMargin = CalculateMargin(SecondsPassed);
+                    ProgressMargin = CalculateMarginThickness(SecondsPassed);
                     var alertHitKey = AlertHit();
                     if (alertHitKey != -1)
                     {
@@ -197,7 +203,7 @@ namespace AlertMe.Timeline
                     UpdateView();
                 }
                 UpdateNext();
-                await Task.Delay(980);
+                Task.Delay(980);
             }
         }
 

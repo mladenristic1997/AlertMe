@@ -1,4 +1,6 @@
-﻿using AlertMe.Domain;
+﻿using AlertMe.AlertSoundSelector;
+using AlertMe.Domain;
+using AlertMe.Home;
 using AlertMe.Plans;
 using CommonServiceLocator;
 using Prism.Events;
@@ -37,7 +39,9 @@ namespace AlertMe
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
+            AddModule(moduleCatalog, typeof(HomeModule));
             AddModule(moduleCatalog, typeof(PlansModule));
+            AddModule(moduleCatalog, typeof(AlertSoundSelectorModule));
             base.ConfigureModuleCatalog(moduleCatalog);
         }
 

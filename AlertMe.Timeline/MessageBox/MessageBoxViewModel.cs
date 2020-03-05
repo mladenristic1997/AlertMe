@@ -1,4 +1,6 @@
-﻿namespace AlertMe.Timeline
+﻿using Prism.Mvvm;
+
+namespace AlertMe.Timeline
 {
     public class MessageBoxViewModel : BindableBase
     {
