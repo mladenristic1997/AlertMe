@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Controls;
 using Alert = AlertMe.Domain.Alert;
 using System.Linq;
+using AlertMe.Timeline.AlertCheckpoint;
+using System;
 
 namespace AlertMe.Plans
 {
@@ -41,8 +43,8 @@ namespace AlertMe.Plans
         }
 
         public ObservableCollection<Control> Alerts { get; set; }
-
         public ObservableCollection<Timeline.Alert> TimelineAlerts { get; set; }
+        public ObservableCollection<AlertCheckpointViewModel> AlertCheckpoints { get; set; }
 
         public AlertPlanViewModel(IEventAggregator ea)
         {
@@ -52,44 +54,95 @@ namespace AlertMe.Plans
             Delete = new DelegateCommand(OnDelete);
             Alerts = new ObservableCollection<Control>();
             TimelineAlerts = new ObservableCollection<Timeline.Alert>();
+            AlertCheckpoints = new ObservableCollection<AlertCheckpointViewModel>();
             EventAggregator.GetEvent<AlertChanged>().Subscribe(OnAlertChanged);
             EventAggregator.GetEvent<RemoveAlert>().Subscribe(OnRemoveAlert);
         }
 
         void OnAlertChanged(AlertChangedArgs args)
         {
-            UpdatePlanDuration();
-            var list = new ObservableCollection<Timeline.Alert>();
+            if (!AlertCheckpoints.Select(x => x.Id).Where(x => x == args.Id).Any())
+                return;
+            PlanDuration = CalculateNewPlanDuration(args);
             foreach (var a in TimelineAlerts)
             {
                 if (a.Id == args.Id)
                 {
                     a.Message = args.Message;
                     a.TotalSeconds = CalculateInSeconds(args.Hours, args.Minutes, args.Seconds);
+                    break;
                 }
-                list.Add(a);
             }
-            TimelineAlerts = null;
-            TimelineAlerts = list;
+            int seconds = 0;
+            foreach (var a in AlertCheckpoints)
+            {
+                if (a.Id == args.Id)
+                {
+                    a.Message = args.Message;
+                    a.AlertAt = ParseTime(seconds + CalculateInSeconds(args.Hours, args.Minutes, args.Seconds));
+                    a.TotalSeconds = CalculateInSeconds(args.Hours, args.Minutes, args.Seconds);
+                    a.Margin = new Thickness(CalculateMargin(a.TotalSeconds, PlanDuration), 0, 0, 0);
+                    a.IsVisible = a.TotalSeconds != 0;
+                }
+                seconds += a.TotalSeconds;
+            }
         }
 
-        int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
+        int CalculateNewPlanDuration(AlertChangedArgs args)
+        {
+            var duration = 0;
+            foreach (var a in TimelineAlerts)
+            {
+                if (a.Id == args.Id)
+                {
+                    duration += CalculateInSeconds(args.Hours, args.Minutes, args.Seconds);
+                    continue;
+                }
+                duration += a.TotalSeconds;
+            }
+            return duration;
+        }
+
+        int CalculateNewPlanDuration()
+        {
+            var duration = 0;
+            foreach (var a in TimelineAlerts)
+                duration += a.TotalSeconds;
+            return duration;
+        }
+
+            string ParseTime(int totalSeconds)
+            {
+                var hours = totalSeconds / 3600;
+                totalSeconds = totalSeconds % 3600;
+                var minutes = totalSeconds / 60;
+                totalSeconds = totalSeconds % 60;
+                var seconds = totalSeconds;
+                return $"{GetTime(hours)}:{GetTime(minutes)}:{GetTime(seconds)}";
+            }
+
+            string GetTime(int count) => count.ToString() == string.Empty ?
+                "00"
+                :
+                count.ToString();
+
+        //this function sux ass
+            double CalculateMargin(int time, int planDuration) => Math.Round((750.0 * time / planDuration), 2);
+
+            int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
 
         void OnAddNewAlert()
         {
             var id = IdProvider.GetId();
             Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id, PlanId = Id } });
-            var list = new ObservableCollection<Timeline.Alert>();
-            foreach (var a in TimelineAlerts)
-                list.Add(a);
-            list.Add(new Timeline.Alert { Id = id });
-            TimelineAlerts = null;
-            TimelineAlerts = list;
-            UpdatePlanDuration();
+            TimelineAlerts.Add(new Timeline.Alert { Id = id });
+            AlertCheckpoints.Add(new AlertCheckpointViewModel { Id = id, IsVisible = false });
         }
 
         void OnRemoveAlert(RemoveAlertArgs args)
         {
+            if (!AlertCheckpoints.Select(x => x.Id).Where(x => x == args.Id).Any())
+                return;
             foreach (var alert in Alerts)
             {
                 var vm = alert.DataContext as AlertViewModel;
@@ -107,12 +160,27 @@ namespace AlertMe.Plans
                     return;
                 }
             }
-            var list = new ObservableCollection<Timeline.Alert>();
-            foreach (var a in TimelineAlerts)
-                list.Add(a);
-            TimelineAlerts = null;
-            TimelineAlerts = list;
-            UpdatePlanDuration();
+            foreach (var alert in AlertCheckpoints)
+            {
+                if (alert.Id == args.Id)
+                {
+                    AlertCheckpoints.Remove(alert);
+                    return;
+                }
+            }
+            PlanDuration = CalculateNewPlanDuration();
+            UpdateAlertCheckpoints();
+        }
+        
+        void UpdateAlertCheckpoints()
+        {
+            int seconds = 0;
+            foreach (var a in AlertCheckpoints)
+            {
+                seconds += a.TotalSeconds;
+                a.AlertAt = ParseTime(seconds + a.TotalSeconds);
+                a.Margin = new Thickness(CalculateMargin(a.TotalSeconds, PlanDuration), 0, 0, 0);
+            }
         }
 
         void OnSave()
@@ -147,10 +215,8 @@ namespace AlertMe.Plans
             EventAggregator.GetEvent<DeleteAlertPlan>().Publish(new DeleteAlertPlanArgs { Id = Id });
         }
 
-        public void UpdatePlanDuration()
-        {
-            var vms = Alerts.Select(x => x.DataContext as AlertViewModel).ToDictionary(x => x.Id, x => x);
-            PlanDuration = vms.Sum(x => CalculateInSeconds(x.Value.Hours, x.Value.Minutes, x.Value.Seconds));
-        }
+        #region timeline behavior
+
+        #endregion
     }
 }

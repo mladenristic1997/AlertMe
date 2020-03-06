@@ -7,6 +7,7 @@
              xmlns:domain="clr-namespace:AlertMe.Domain;assembly=AlertMe.Domain"
              Title="AlertMe"
              mc:Ignorable="d"
+             MouseDown="Window_MouseDown"
              WindowState="Maximized"
              WindowStartupLocation="CenterScreen"
              d:DesignHeight="450" d:DesignWidth="800">

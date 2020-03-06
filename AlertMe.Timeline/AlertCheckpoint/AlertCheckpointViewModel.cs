@@ -34,5 +34,13 @@ namespace AlertMe.Timeline.AlertCheckpoint
         }
 
         public double LeftMargin { get; set; }
+        public int TotalSeconds { get; set; }
+
+        bool isVisible;
+        public bool IsVisible
+        {
+            get => isVisible;
+            set => SetProperty(ref isVisible, value);
+        }
     }
 }

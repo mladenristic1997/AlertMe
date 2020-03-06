@@ -13,10 +13,10 @@
         Width="Auto"
         Height="Auto"
         Name="Wrapper">
-        <progress:Progress
+        <!--<progress:Progress
             Alerts="{Binding TimelineAlerts}"
             ControlWidth="{Binding ElementName=Wrapper, Path=ActualWidth}"
-            PlanDuration="{Binding PlanDuration}" />
+            PlanDuration="{Binding PlanDuration}" />-->
     </Grid>
 
 </UserControl>

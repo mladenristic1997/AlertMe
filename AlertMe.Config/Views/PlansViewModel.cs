@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using AlertMe.Timeline.AlertCheckpoint;
+using System;
 
 namespace AlertMe.Plans
 {
@@ -55,6 +57,7 @@ namespace AlertMe.Plans
                     var cf = Store.GetObject<AlertPlan>(cfg);
                     var alertsList = new ObservableCollection<Control>();
                     var timelineAlerts = new ObservableCollection<Timeline.Alert>();
+                    var alertCheckpoints = new ObservableCollection<AlertCheckpointViewModel>();
                     foreach (var alert in cf.Alerts)
                     {
                         var avm = new AlertViewModel(EventAggregator) { 
@@ -74,12 +77,42 @@ namespace AlertMe.Plans
                         };
                         timelineAlerts.Add(ta);
                     }
-                    var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList, TimelineAlerts = timelineAlerts, PlanDuration = timelineAlerts.Sum(x => x.TotalSeconds) };
+                    var seconds = 0;
+                    foreach (var a in timelineAlerts)
+                    {
+                        seconds += a.TotalSeconds;
+                        var ac = new AlertCheckpointViewModel();
+                        ac.Id = a.Id;
+                        ac.Message = a.Message;
+                        ac.AlertAt = ParseTime(seconds);
+                        ac.TotalSeconds = a.TotalSeconds;
+                        ac.IsVisible = true;
+                        ac.Margin = new Thickness(CalculateMargin(a.TotalSeconds, timelineAlerts.Sum(x => x.TotalSeconds)), 0, 0, 0);
+                        alertCheckpoints.Add(ac);
+                    }
+                    var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList, TimelineAlerts = timelineAlerts, AlertCheckpoints = alertCheckpoints, PlanDuration = timelineAlerts.Sum(x => x.TotalSeconds) };
                     Plans.Add(new DropdownPlan { Name = cf.Name, Plan = new AlertPlanView { DataContext = vm } });
                     EventAggregator.GetEvent<PlansLoaded>().Publish();
                 }
             }
         }
+
+            string ParseTime(int totalSeconds)
+            {
+                var hours = totalSeconds / 3600;
+                totalSeconds = totalSeconds % 3600;
+                var minutes = totalSeconds / 60;
+                totalSeconds = totalSeconds % 60;
+                var seconds = totalSeconds;
+                return $"{GetTime(hours)}:{GetTime(minutes)}:{GetTime(seconds)}";
+            }
+
+            string GetTime(int count) => count.ToString() == string.Empty ?
+                "00"
+                :
+                count.ToString();
+
+            double CalculateMargin(int time, int planDuration) => Math.Round(500.0 * time / planDuration, 2);
 
             int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
 

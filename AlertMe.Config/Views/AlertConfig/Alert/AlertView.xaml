@@ -6,6 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="900">
     <StackPanel 
+        Margin="0 20"
         Height="Auto"
         Width="Auto"
         Orientation="Horizontal">
@@ -20,7 +21,7 @@
             Height="Auto"
             TextWrapping="Wrap"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Hours}"
+            Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 
@@ -34,7 +35,7 @@
             TextWrapping="Wrap"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Minutes}"
+            Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 
@@ -48,7 +49,7 @@
             TextWrapping="Wrap"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Seconds}"
+            Text="{Binding Seconds, UpdateSourceTrigger=PropertyChanged}"
             />
 
         <TextBlock 

@@ -24,5 +24,10 @@ namespace AlertMe.Shell
         {
             InitializeComponent();
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
+        }
     }
 }

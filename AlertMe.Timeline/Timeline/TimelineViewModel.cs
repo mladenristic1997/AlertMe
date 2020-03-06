@@ -74,6 +74,6 @@ namespace AlertMe.Timeline
             :
             count.ToString();
 
-            double CalculateMargin(int time) => Math.Round((ControlWidth * time / PlanDuration) - 14, 2);
+            double CalculateMargin(int time) => Math.Round((500.0 * time / PlanDuration) - 14, 2);
     }
 }
