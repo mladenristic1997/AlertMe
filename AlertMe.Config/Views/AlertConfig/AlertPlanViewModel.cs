@@ -79,13 +79,16 @@ namespace AlertMe.Plans
                 if (a.Id == args.Id)
                 {
                     a.Message = args.Message;
-                    a.AlertAt = ParseTime(seconds + CalculateInSeconds(args.Hours, args.Minutes, args.Seconds));
                     a.TotalSeconds = CalculateInSeconds(args.Hours, args.Minutes, args.Seconds);
-                    a.Margin = new Thickness(CalculateMargin(a.TotalSeconds, PlanDuration), 0, 0, 0);
+                    a.AlertAt = ParseTime(seconds + a.TotalSeconds);
+                    a.Margin = new Thickness(CalculateMargin(seconds + a.TotalSeconds, PlanDuration) + 14, 0, 14, 0);
                     a.IsVisible = a.TotalSeconds != 0;
+                    break;
                 }
                 seconds += a.TotalSeconds;
             }
+            UpdateAlertCheckpoints();
+            EventAggregator.GetEvent<FinishedViewModelUpdate>().Publish();
         }
 
         int CalculateNewPlanDuration(AlertChangedArgs args)
@@ -127,7 +130,7 @@ namespace AlertMe.Plans
                 count.ToString();
 
         //this function sux ass
-            double CalculateMargin(int time, int planDuration) => Math.Round((750.0 * time / planDuration), 2);
+            double CalculateMargin(int time, int planDuration) => Math.Round(750.0 * time / planDuration, 2);
 
             int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
 
@@ -149,7 +152,7 @@ namespace AlertMe.Plans
                 if (vm.Id == args.Id)
                 {
                     Alerts.Remove(alert);
-                    return;
+                    break;
                 }
             }
             foreach (var alert in TimelineAlerts)
@@ -157,7 +160,7 @@ namespace AlertMe.Plans
                 if (alert.Id == args.Id)
                 {
                     TimelineAlerts.Remove(alert);
-                    return;
+                    break;
                 }
             }
             foreach (var alert in AlertCheckpoints)
@@ -165,21 +168,22 @@ namespace AlertMe.Plans
                 if (alert.Id == args.Id)
                 {
                     AlertCheckpoints.Remove(alert);
-                    return;
+                    break;
                 }
             }
             PlanDuration = CalculateNewPlanDuration();
             UpdateAlertCheckpoints();
+            EventAggregator.GetEvent<FinishedViewModelUpdate>().Publish();
         }
-        
+
         void UpdateAlertCheckpoints()
         {
             int seconds = 0;
             foreach (var a in AlertCheckpoints)
             {
-                seconds += a.TotalSeconds;
                 a.AlertAt = ParseTime(seconds + a.TotalSeconds);
-                a.Margin = new Thickness(CalculateMargin(a.TotalSeconds, PlanDuration), 0, 0, 0);
+                a.Margin = new Thickness(CalculateMargin(seconds + a.TotalSeconds, PlanDuration), 0, 0, 0);
+                seconds += a.TotalSeconds;
             }
         }
 

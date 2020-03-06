@@ -72,7 +72,15 @@
             Background="OrangeRed"
             Cursor="Hand"
             Command="{Binding OpenSoundSelector}">
-            Find speaker icon!! 
+            <Button.Template>
+                <ControlTemplate>
+                    <Image 
+                        Height="32"
+                        Width="32"
+                        Source="pack://application:,,,/AlertMe.Plans;component/Images/speaker.png"
+                        />
+                </ControlTemplate>
+            </Button.Template>
         </Button>
 
         <Button 

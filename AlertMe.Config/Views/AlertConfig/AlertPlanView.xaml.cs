@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AlertMe.Plans.Events;
+using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AlertMe.Plans
 {
@@ -20,9 +23,17 @@ namespace AlertMe.Plans
     /// </summary>
     public partial class AlertPlanView : UserControl
     {
-        public AlertPlanView()
+        readonly IEventAggregator EventAggregator;
+        public AlertPlanView(IEventAggregator ea)
         {
+            EventAggregator = ea;
+            EventAggregator.GetEvent<FinishedViewModelUpdate>().Subscribe(OnUpdate);
             InitializeComponent();
+        }
+
+        void OnUpdate()
+        {
+            TimelineControl.Dispatcher.Invoke(() => { }, DispatcherPriority.Render);
         }
     }
 }

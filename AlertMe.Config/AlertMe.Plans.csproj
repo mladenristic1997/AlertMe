@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Messages\Commands\LoadPlans.cs" />
+    <Compile Include="Messages\Events\FinishedViewModelUpdate.cs" />
     <Compile Include="Messages\Events\PlansLoaded.cs" />
     <Compile Include="PlansModule.cs" />
     <Compile Include="Messages\Commands\RemoveAlert.cs" />
@@ -127,6 +128,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\speaker.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

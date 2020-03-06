@@ -19,8 +19,7 @@
             FontSize="16"
             />
         <Grid
-            Panel.ZIndex="0"
-            Margin="0 25 0 0">
+            Panel.ZIndex="0">
             <Rectangle
                 HorizontalAlignment="Center"
                 Width="2"
@@ -28,7 +27,6 @@
                 />
         </Grid>
         <Ellipse 
-            Margin="0 25 0 0"
             VerticalAlignment="Top"
             Height="14"
             Width="14"

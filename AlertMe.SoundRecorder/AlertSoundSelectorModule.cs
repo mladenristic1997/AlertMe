@@ -1,4 +1,5 @@
-﻿using Prism.Ioc;
+﻿using AlertMe.Domain;
+using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 
@@ -19,6 +20,7 @@ namespace AlertMe.AlertSoundSelector
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            RegionManager.RegisterViewWithRegion(RegionNames.SoundRecorderRegion, typeof(AlertSoundSelectorView));
             RegionManager.RegisterViewWithRegion(AlertSoundSelectorRegionNames.RecordNewRegion, typeof(RecordNewView));
             RegionManager.RegisterViewWithRegion(AlertSoundSelectorRegionNames.SelectExistingRegion, typeof(SelectExistingView));
         }

@@ -86,12 +86,12 @@ namespace AlertMe.Plans
                         ac.Message = a.Message;
                         ac.AlertAt = ParseTime(seconds);
                         ac.TotalSeconds = a.TotalSeconds;
-                        ac.IsVisible = true;
-                        ac.Margin = new Thickness(CalculateMargin(a.TotalSeconds, timelineAlerts.Sum(x => x.TotalSeconds)), 0, 0, 0);
+                        ac.IsVisible = ac.TotalSeconds != 0;
+                        ac.Margin = new Thickness(CalculateMargin(seconds, timelineAlerts.Sum(x => x.TotalSeconds)) + 14, 0, 14, 0);
                         alertCheckpoints.Add(ac);
                     }
                     var vm = new AlertPlanViewModel(EventAggregator) { PlanName = cf.Name, Id = cf.Id, Alerts = alertsList, TimelineAlerts = timelineAlerts, AlertCheckpoints = alertCheckpoints, PlanDuration = timelineAlerts.Sum(x => x.TotalSeconds) };
-                    Plans.Add(new DropdownPlan { Name = cf.Name, Plan = new AlertPlanView { DataContext = vm } });
+                    Plans.Add(new DropdownPlan { Name = cf.Name, Plan = new AlertPlanView(EventAggregator) { DataContext = vm } });
                     EventAggregator.GetEvent<PlansLoaded>().Publish();
                 }
             }
@@ -112,13 +112,15 @@ namespace AlertMe.Plans
                 :
                 count.ToString();
 
-            double CalculateMargin(int time, int planDuration) => Math.Round(500.0 * time / planDuration, 2);
+            double CalculateMargin(int time, int planDuration) => Math.Round(750.0 * time / planDuration, 2);
 
             int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
 
 
         void OnAddNewPlan()
         {
+            if (NewPlanName == string.Empty)
+                return;
             if (Plans.Select(x => x.Name).Where(y => y == NewPlanName).Any())
             {
                 MessageBox.Show("Config with that name already exists.", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
@@ -131,7 +133,7 @@ namespace AlertMe.Plans
         {
             var vm = new AlertPlanViewModel(EventAggregator) { Id = IdProvider.GetId(), PlanName = NewPlanName };
             vm.AddNewAlert.Execute();
-            var v = new AlertPlanView { DataContext = vm };
+            var v = new AlertPlanView(EventAggregator) { DataContext = vm };
             var plan = new DropdownPlan { Plan = v, Name = NewPlanName };
             Plans.Add(plan);
             NewPlanName = "";
