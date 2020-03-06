@@ -59,12 +59,18 @@ namespace AlertMe.Plans
         void OnAlertChanged(AlertChangedArgs args)
         {
             UpdatePlanDuration();
+            var list = new ObservableCollection<Timeline.Alert>();
             foreach (var a in TimelineAlerts)
+            {
                 if (a.Id == args.Id)
                 {
                     a.Message = args.Message;
                     a.TotalSeconds = CalculateInSeconds(args.Hours, args.Minutes, args.Seconds);
                 }
+                list.Add(a);
+            }
+            TimelineAlerts = null;
+            TimelineAlerts = list;
         }
 
         int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
@@ -73,7 +79,12 @@ namespace AlertMe.Plans
         {
             var id = IdProvider.GetId();
             Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id, PlanId = Id } });
-            TimelineAlerts.Add(new Timeline.Alert { Id = id });
+            var list = new ObservableCollection<Timeline.Alert>();
+            foreach (var a in TimelineAlerts)
+                list.Add(a);
+            list.Add(new Timeline.Alert { Id = id });
+            TimelineAlerts = null;
+            TimelineAlerts = list;
             UpdatePlanDuration();
         }
 
@@ -96,6 +107,11 @@ namespace AlertMe.Plans
                     return;
                 }
             }
+            var list = new ObservableCollection<Timeline.Alert>();
+            foreach (var a in TimelineAlerts)
+                list.Add(a);
+            TimelineAlerts = null;
+            TimelineAlerts = list;
             UpdatePlanDuration();
         }
 

@@ -131,6 +131,9 @@ namespace AlertMe.Timeline
 
         public void UpdateView()
         {
+            AlertCheckpoints = null;
+            foreach (var a in Alerts)
+                a.Update = null;
             var list = new ObservableCollection<AlertCheckpointViewModel>();
             DateTime now = ReferenceTime;
             foreach (var a in Alerts)
@@ -158,8 +161,8 @@ namespace AlertMe.Timeline
             }
         }
 
-        double CalculateMargin(int time) => (ControlWidth * time / PlanDuration) - 14;
-        Thickness CalculateMarginThickness(int time) => new Thickness((ControlWidth * time / PlanDuration) - 14, 0, 0, 0);
+        double CalculateMargin(int time) => Math.Round((ControlWidth * time / PlanDuration), 2);
+        Thickness CalculateMarginThickness(int time) => new Thickness(CalculateMargin(time), 0, 0, 0);
 
         public void AssignAlertTimes()
         {

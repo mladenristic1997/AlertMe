@@ -15,7 +15,7 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Stretch">
         <TextBlock
-            Text="{Binding AlertAt, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding AlertAt}"
             FontSize="16"
             />
         <Grid

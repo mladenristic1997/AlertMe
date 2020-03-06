@@ -11,6 +11,7 @@ namespace AlertMe.Timeline
             DependencyProperty.Register("Alerts", typeof(ObservableCollection<Alert>), typeof(Timeline), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnAlertsChanged,
+                BindsTwoWayByDefault = true
             });
 
         static void OnAlertsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -25,13 +26,13 @@ namespace AlertMe.Timeline
         public ObservableCollection<Alert> Alerts
         {
             get => (ObservableCollection<Alert>)GetValue(AlertsProperty);
-            set => SetValue(AlertsProperty, value);
+            set => SetValue(AlertsProperty, new ObservableCollection<Alert>());
         }
 
 
 
         public static readonly DependencyProperty ControlWidthProperty =
-            DependencyProperty.Register("ControlWidth", typeof(int), typeof(Timeline), new FrameworkPropertyMetadata()
+            DependencyProperty.Register("ControlWidth", typeof(double), typeof(Timeline), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnControlWidthChanged,
             });
@@ -42,9 +43,9 @@ namespace AlertMe.Timeline
             vm.ViewModel.ControlWidth = Convert.ToInt32(e.NewValue);
         }
 
-        public int ControlWidth
+        public double ControlWidth
         {
-            get => int.Parse(GetValue(ControlWidthProperty).ToString());
+            get => double.Parse(GetValue(ControlWidthProperty).ToString());
             set => SetValue(ControlWidthProperty, value);
         }
 

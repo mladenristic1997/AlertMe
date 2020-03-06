@@ -11,7 +11,7 @@ namespace AlertMe.Timeline
             DependencyProperty.Register("Alerts", typeof(ObservableCollection<Alert>), typeof(Progress), new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = OnAlertsChanged,
-                BindsTwoWayByDefault = false,
+                BindsTwoWayByDefault = true
             });
 
         static void OnAlertsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -28,7 +28,7 @@ namespace AlertMe.Timeline
         public ObservableCollection<Alert> Alerts
         {
             get => (ObservableCollection<Alert>)GetValue(AlertsProperty);
-            set => SetValue(AlertsProperty, value);
+            set => SetValue(AlertsProperty, new ObservableCollection<Alert>());
         }
 
 

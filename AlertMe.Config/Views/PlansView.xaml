@@ -8,6 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel
+        Focusable="True" Name="BackgroundPlane" MouseDown="BackgroundPlane_MouseDown"
         HorizontalAlignment="Stretch"
         >
         <StackPanel 
@@ -15,8 +16,8 @@
             Orientation="Horizontal">
             <ComboBox
                 Margin="0 10 20 10"
-                Name="AlertConfigs"
-                ItemsSource="{Binding Plans, UpdateSourceTrigger=PropertyChanged}"
+                Name="AlertPlans"
+                ItemsSource="{Binding Plans}"
                 SelectedItem="{Binding SelectedPlan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="{Binding}"
                 DisplayMemberPath="Name"
@@ -59,6 +60,6 @@
                 </Button.Template>
             </Button>
         </StackPanel>
-        <ContentControl Content="{Binding SelectedPlan.Plan, UpdateSourceTrigger=PropertyChanged}" />
+        <ContentControl Content="{Binding SelectedPlan.Plan}" />
     </StackPanel>
 </UserControl>

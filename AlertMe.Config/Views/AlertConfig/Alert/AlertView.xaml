@@ -20,7 +20,7 @@
             Height="Auto"
             TextWrapping="Wrap"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Hours}"
             />
 
         <TextBlock 
@@ -34,7 +34,7 @@
             TextWrapping="Wrap"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Minutes}"
             />
 
         <TextBlock 
@@ -48,7 +48,7 @@
             TextWrapping="Wrap"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
-            Text="{Binding Seconds, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Seconds}"
             />
 
         <TextBlock 
@@ -61,7 +61,7 @@
             Height="Auto"
             TextWrapping="Wrap"
             Margin="5 0"
-            Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Message, UpdateSourceTrigger=LostFocus}"
             />
 
         <Button 

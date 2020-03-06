@@ -14,8 +14,8 @@
         Height="Auto"
         Name="Wrapper">
         <progress:Progress
-            Alerts="{Binding TimelineAlerts, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-            ControlWidth="{Binding ElementName=Wrapper, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}"
+            Alerts="{Binding TimelineAlerts}"
+            ControlWidth="{Binding ElementName=Wrapper, Path=ActualWidth}"
             PlanDuration="{Binding PlanDuration}" />
     </Grid>
 

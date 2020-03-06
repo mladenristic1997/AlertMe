@@ -1,9 +1,7 @@
-﻿
-using AlertMe.Timeline.AlertCheckpoint;
+﻿using AlertMe.Timeline.AlertCheckpoint;
 using Prism.Mvvm;
+using System;
 using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace AlertMe.Timeline
 {
@@ -43,12 +41,15 @@ namespace AlertMe.Timeline
 
         public void UpdateView()
         {
+            AlertCheckpoints = null;
+            foreach (var a in Alerts)
+                a.Update = null;
             var list = new ObservableCollection<AlertCheckpointViewModel>();
             int seconds = 0;
             foreach (var a in Alerts)
             {
                 seconds += a.TotalSeconds;
-                var vm = new AlertCheckpoint.AlertCheckpointViewModel();
+                var vm = new AlertCheckpointViewModel();
                 vm.Id = a.Id;
                 vm.Message = a.Message;
                 vm.AlertAt = ParseTime(seconds);
@@ -73,6 +74,6 @@ namespace AlertMe.Timeline
             :
             count.ToString();
 
-            double CalculateMargin(int time) => (ControlWidth * time / PlanDuration) - 14;
+            double CalculateMargin(int time) => Math.Round((ControlWidth * time / PlanDuration) - 14, 2);
     }
 }

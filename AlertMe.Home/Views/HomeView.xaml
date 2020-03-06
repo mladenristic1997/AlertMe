@@ -20,7 +20,7 @@
             />
             <ComboBox
                 Margin="0 10 20 10"
-                ItemsSource="{Binding Plans, UpdateSourceTrigger=PropertyChanged}"
+                ItemsSource="{Binding Plans}"
                 SelectedItem="{Binding SelectedPlan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="{Binding}"
                 DisplayMemberPath="Name"
@@ -29,6 +29,6 @@
         </StackPanel>
         <ContentControl 
             HorizontalAlignment="Center"
-            Content="{Binding SelectedPlan.Plan, UpdateSourceTrigger=PropertyChanged}" />
+            Content="{Binding SelectedPlan.Plan}" />
     </StackPanel>
 </UserControl>

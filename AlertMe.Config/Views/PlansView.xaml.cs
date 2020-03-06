@@ -39,17 +39,22 @@ namespace AlertMe.Plans
 
         void UpdateComboBox()
         {
-            AlertConfigs.SelectedIndex = AlertConfigs.Items.Count - 1;
+            AlertPlans.SelectedIndex = AlertPlans.Items.Count - 1;
         }
 
         void OnPlansLoaded()
         {
-            AlertConfigs.SelectedIndex = AlertConfigs.Items.Count > 0 ? 0 : -1;
+            AlertPlans.SelectedIndex = AlertPlans.Items.Count > 0 ? 0 : -1;
         }
 
         void OnDeleteConfig(DeleteAlertPlanArgs e)
         {
-            AlertConfigs.SelectedIndex = AlertConfigs.Items.Count > 0 ? 0 : -1;
+            AlertPlans.SelectedIndex = AlertPlans.Items.Count > 0 ? 0 : -1;
+        }
+
+        private void BackgroundPlane_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            BackgroundPlane.Focus();
         }
     }
 }

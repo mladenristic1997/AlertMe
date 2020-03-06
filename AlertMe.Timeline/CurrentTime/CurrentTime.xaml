@@ -11,7 +11,7 @@
     </UserControl.Resources>
     <Grid 
         Name="LayoutRoot"
-        Visibility="{Binding PercentagePassed, Converter={StaticResource progressVisibility}, UpdateSourceTrigger=PropertyChanged}"
+        Visibility="{Binding PercentagePassed, Converter={StaticResource progressVisibility}}"
         Margin="{Binding LeftMargin}"
         VerticalAlignment="Stretch">
         <Rectangle
