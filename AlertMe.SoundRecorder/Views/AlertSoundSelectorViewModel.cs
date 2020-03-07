@@ -75,7 +75,7 @@ namespace AlertMe.AlertSoundSelector
 
         bool SoundExists()
         {
-            var path = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/AlertMe/{PlanId}/{AlertId}.mp3";
+            var path = GetSoundPathFile();
             if (File.Exists(path))
                 return true;
             return false;
@@ -85,7 +85,7 @@ namespace AlertMe.AlertSoundSelector
         {
             try
             {
-                var path = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/AlertMe/{PlanId}/{AlertId}.mp3";
+                string path = GetSoundPathFile();
                 Player.Open(new Uri(path));
                 IsPlaying = true;
                 IsStopped = false;
@@ -96,6 +96,8 @@ namespace AlertMe.AlertSoundSelector
                 EventAggregator.GetEvent<ApplicationErrorOccured>().Publish(new ApplicationErrorOccuredArgs { Error = "Unable to play the sound file" });
             }
         }
+
+        string GetSoundPathFile() => $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/AlertMe/{PlanId}/{AlertId}.mp3";
 
         void OnStopPlaying()
         {
