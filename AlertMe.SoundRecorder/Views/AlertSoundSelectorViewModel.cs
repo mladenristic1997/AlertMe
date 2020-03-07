@@ -6,12 +6,14 @@ using Prism.Mvvm;
 using System;
 using System.IO;
 using System.Media;
+using System.Windows.Media;
 
 namespace AlertMe.AlertSoundSelector
 {
     public class AlertSoundSelectorViewModel : BindableBase
     {
         readonly IEventAggregator EventAggregator;
+        readonly MediaPlayer Player;
 
         public DelegateCommand PlayCurrentAlertSound { get; set; }
         public DelegateCommand CloseDialog { get; set; }
@@ -36,11 +38,11 @@ namespace AlertMe.AlertSoundSelector
         public AlertSoundSelectorViewModel(IEventAggregator ea)
         {
             EventAggregator = ea;
+            Player = new MediaPlayer();
             EventAggregator.GetEvent<OpenAlertSoundSelector>().Subscribe(OnOpen);
             EventAggregator.GetEvent<AlertSoundSelected>().Subscribe(() => AlertSoundExists = true);
             CloseDialog = new DelegateCommand(() => IsOpen = false);
             PlayCurrentAlertSound = new DelegateCommand(OnPlaySound);
-            AlertSoundExists = CheckIfSoundExists();
         }
 
         void OnOpen(OpenAlertSoundSelectorArgs args)
@@ -48,29 +50,23 @@ namespace AlertMe.AlertSoundSelector
             IsOpen = true;
             PlanId = args.PlanId;
             AlertId = args.AlertId;
-            //load sound if exists
-            //
+            if (SoundExists())
+                AlertSoundExists = true;
+        }
+
+        bool SoundExists()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + PlanId;
+            if (File.Exists($"{path}/{AlertId}.mp3"))
+                return true;
+            return false;
         }
 
         void OnPlaySound()
         {
-            //play sound by name, navigate to folder planId/alertId.mp3 or alertId.wav
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + PlanId;
-            if (File.Exists($"{path}.mp3"))
-            {
-                var player = new SoundPlayer($"{path}.mp3");
-                player.Play();
-            }
-        }
-
-        bool CheckIfSoundExists()
-        {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + PlanId;
-            if (File.Exists($"{path}.mp3"))
-                return true;
-            if (File.Exists($"{path}.wav"))
-                return true;
-            return false;
+            var path = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/AlertMe/{PlanId}/{AlertId}.mp3";
+            Player.Open(new Uri(path));
+            Player.Play();
         }
     }
 }

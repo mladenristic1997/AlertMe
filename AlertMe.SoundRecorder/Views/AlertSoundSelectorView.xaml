@@ -34,6 +34,7 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     Visibility="{Binding AlertSoundExists, Converter={StaticResource boolToVis}}">
+                    
                     <TextBlock 
                         VerticalAlignment="Center"
                         Text="Current alert sound: "
@@ -46,28 +47,9 @@
                     >
                         <Button.Template>
                             <ControlTemplate>
-                                <Grid>
-                                    <Grid>
-                                        <Line 
-                                        X1="0" Y1="0" 
-                                        X2="25" Y2="15" 
-                                        Fill="Green" 
-                                        Stroke="Green"
-                                        StrokeThickness="1"/>
-                                        <Line 
-                                        X1="25" Y1="15" 
-                                        X2="0" Y2="30" 
-                                        Fill="Green" 
-                                        Stroke="Green"
-                                        StrokeThickness="1"/>
-                                        <Line 
-                                        X1="0" Y1="0" 
-                                        X2="0" Y2="30" 
-                                        Fill="Green" 
-                                        Stroke="Green"
-                                        StrokeThickness="1"/>
-                                    </Grid>
-                                </Grid>
+                                <Polygon 
+                                    Points="0,0 25,15 0,30" Stroke="Green" Fill="White"
+                                    />
                             </ControlTemplate>
                         </Button.Template>
                     </Button>

@@ -14,12 +14,12 @@ namespace AlertMe.AlertSoundSelector
         public SelectExistingViewModel(IEventAggregator ea)
         {
             EventAggregator = ea;
-            EventAggregator.GetEvent<AlertSoundSelected>().Publish();
             SelectSound = new DelegateCommand(OnSelectSound);
         }
 
         void OnSelectSound()
         {
+            EventAggregator.GetEvent<AlertSoundSelected>().Publish();
             //open file picker dialog and choose mp3 or wav
         }
     }

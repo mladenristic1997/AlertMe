@@ -5,7 +5,15 @@ namespace AlertMe.AlertSoundSelector
 {
     public class RecordNewViewModel : BindableBase
     {
-        public DelegateCommand ToggleRecord { get; set; }
+        public DelegateCommand StartRecording { get; set; }
+        public DelegateCommand StopRecording { get; set; }
+
+        string statusText;
+        public string StatusText
+        {
+            get => statusText;
+            set => SetProperty(ref statusText, value);
+        }
 
         bool isRecording;
         public bool IsRecording
@@ -14,14 +22,32 @@ namespace AlertMe.AlertSoundSelector
             set => SetProperty(ref isRecording, value);
         }
 
-        public RecordNewViewModel()
+        bool isIdle;
+        public bool IsIdle
         {
-            ToggleRecord = new DelegateCommand(OnToggleRecord);
+            get => isIdle;
+            set => SetProperty(ref isIdle, value);
         }
 
-        void OnToggleRecord()
+        public RecordNewViewModel()
         {
-            //record sound
+            StartRecording = new DelegateCommand(OnStartRecording);
+            StopRecording = new DelegateCommand(OnStopRecording);
+            StatusText = "Record new";
+        }
+
+        void OnStartRecording()
+        {
+            IsRecording = true;
+            IsIdle = false;
+            StatusText = "Recording";
+        }
+
+        void OnStopRecording()
+        {
+            IsRecording = false;
+            IsIdle = true;
+            StatusText = "Record new";
         }
     }
 }

@@ -34,26 +34,9 @@
             >
             <Button.Template>
                 <ControlTemplate>
-                    <Grid>
-                        <Line 
-                            X1="10" Y1="0" 
-                            X2="70" Y2="40" 
-                            Fill="Green" 
-                            Stroke="Green"
-                            StrokeThickness="1"/>
-                        <Line 
-                            X1="70" Y1="40" 
-                            X2="10" Y2="80" 
-                            Fill="Green" 
-                            Stroke="Green"
-                            StrokeThickness="1"/>
-                        <Line 
-                            X1="10" Y1="0" 
-                            X2="10" Y2="80" 
-                            Fill="Green" 
-                            Stroke="Green"
-                            StrokeThickness="1"/>
-                    </Grid>
+                    <Polygon 
+                        Points="10,0 70,40 10,80" Stroke="Green" Fill="White"
+                        />
                 </ControlTemplate>
             </Button.Template>
         </Button>
