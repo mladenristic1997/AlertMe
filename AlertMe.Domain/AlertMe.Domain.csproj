@@ -109,9 +109,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Downloads\WPF_ToastNotifications-master\PeanutButter.Toasts\PeanutButter.Toast.csproj">
-      <Project>{b871f316-8338-4b69-90a2-b0e3259f0e58}</Project>
-      <Name>PeanutButter.Toast</Name>
+    <ProjectReference Include="..\AlertMe.Toasts\AlertMe.Toast.csproj">
+      <Project>{B871F316-8338-4B69-90A2-B0E3259F0E58}</Project>
+      <Name>AlertMe.Toast</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

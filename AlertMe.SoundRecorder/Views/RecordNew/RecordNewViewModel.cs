@@ -1,19 +1,51 @@
 ﻿using AlertMe.AlertSoundSelector.Events;
 using AlertMe.Domain.Commands;
+using AlertMe.Domain.Events;
+using NAudio.Wave;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AlertMe.AlertSoundSelector
 {
     public class RecordNewViewModel : BindableBase
     {
         readonly IEventAggregator EventAggregator;
+        AudioRecorder Recorder;
 
         public DelegateCommand StartRecording { get; set; }
         public DelegateCommand StopRecording { get; set; }
-        public DelegateCommand RemoveRecording { get; set; }
-        public DelegateCommand SaveRecording { get; set; }
+
+        float LastPeak { get; set; }
+
+        float currentInputLevel;
+        public float CurrentInputLevel
+        {
+            get => LastPeak * 100;
+            set => SetProperty(ref currentInputLevel, value);
+        }
+
+        public double MicrophoneLevel
+        {
+            get { return Recorder.MicrophoneLevel; }
+            set { Recorder.MicrophoneLevel = value; }
+        }
+
+        public List<string> AvailableMicrophones { get; set; }
+
+        string selectedMicrophone;
+        public string SelectedMicrophone
+        {
+            get => selectedMicrophone;
+            set 
+            {
+                SetProperty(ref selectedMicrophone, value);
+                BeginMonitoring();
+            }
+        }
 
         string statusText;
         public string StatusText
@@ -43,19 +75,40 @@ namespace AlertMe.AlertSoundSelector
             set => SetProperty(ref hasRecorded, value);
         }
 
+        string recordedTime;
+        public string RecordedTime
+        {
+            get
+            {
+                var current = Recorder.RecordedTime;
+                return String.Format("{0:D2}:{1:D2}.{2:D3}",
+                    current.Minutes, current.Seconds, current.Milliseconds);
+            }
+            set => SetProperty(ref recordedTime, value);
+        }
+
         string AlertId { get; set; }
         string PlanId { get; set; }
 
         public RecordNewViewModel(IEventAggregator ea)
         {
             EventAggregator = ea;
+            Recorder = new AudioRecorder();
+            Recorder.SampleAggregator.MaximumCalculated += OnRecorderMaximumCalculated;
+            AvailableMicrophones = new List<string>();
             EventAggregator.GetEvent<OpenAlertSoundSelector>().Subscribe(OnOpen);
             StartRecording = new DelegateCommand(OnStartRecording);
             StopRecording = new DelegateCommand(OnStopRecording);
-            RemoveRecording = new DelegateCommand(OnRemoveRecording);
-            SaveRecording = new DelegateCommand(OnSaveRecording);
             EventAggregator.GetEvent<AlertSoundSelectorClosed>().Subscribe(OnClose);
             StatusText = "Record new";
+            InitializeMicrophones();
+        }
+
+        void OnRecorderMaximumCalculated(object sender, MaxSampleEventArgs e)
+        {
+            LastPeak = Math.Max(e.MaxSample, Math.Abs(e.MinSample));
+            RaisePropertyChanged("CurrentInputLevel");
+            RaisePropertyChanged("RecordedTime");
         }
 
         void OnOpen(OpenAlertSoundSelectorArgs e) 
@@ -63,6 +116,17 @@ namespace AlertMe.AlertSoundSelector
             AlertId = e.AlertId; 
             PlanId = e.PlanId;
             IsIdle = true;
+            BeginMonitoring();
+        }
+
+        void BeginMonitoring()
+        {
+            if (string.IsNullOrEmpty(SelectedMicrophone))
+            {
+                EventAggregator.GetEvent<ApplicationErrorOccured>().Publish(new ApplicationErrorOccuredArgs { Error = "Please select a microphone" });
+                return;
+            }
+            Recorder.BeginMonitoring(AvailableMicrophones.IndexOf(SelectedMicrophone));
         }
 
         void OnClose()
@@ -70,34 +134,47 @@ namespace AlertMe.AlertSoundSelector
             if (IsRecording)
                 OnStopRecording();
             HasRecorded = false;
-            //null the recorded value
         }
 
         void OnStartRecording()
         {
+            if (string.IsNullOrEmpty(SelectedMicrophone))
+            {
+                EventAggregator.GetEvent<ApplicationErrorOccured>().Publish(new ApplicationErrorOccuredArgs { Error = "Please select a microphone" });
+                return;
+            }
             IsRecording = true;
             IsIdle = false;
+            HasRecorded = true;
             StatusText = "Recording";
+            var filePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/AlertMe/{PlanId}/{AlertId}";
+            Recorder.BeginRecording(filePath);
         }
 
-        void OnStopRecording()
+        async void OnStopRecording()
         {
             IsRecording = false;
             IsIdle = true;
-            HasRecorded = true;
             StatusText = "Record new";
+            Recorder.Stop();
+            await TrySaveAsMp3();
+            EventAggregator.GetEvent<AlertSoundSelected>().Publish();
         }
 
-        void OnRemoveRecording()
+        async Task TrySaveAsMp3()
         {
-            HasRecorded = false;
-
+            while (!Recorder.SaveFileAsMp3())
+                await Task.Delay(1000);
         }
 
-        void OnSaveRecording()
+        void InitializeMicrophones()
         {
-            HasRecorded = false;
-            //notify of success
+            int num = WaveIn.DeviceCount;
+            for (int i = 0; i < num; i++)
+            {
+                WaveInCapabilities deviceInfo = WaveIn.GetCapabilities(i);
+                AvailableMicrophones.Add(deviceInfo.ProductName);
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using AlertMe.Domain.Events;
-using Prism.Events;
-using System;
-using System.Windows;
 using PeanutButter.Toast;
+using Prism.Events;
+using System.Windows;
 
 namespace AlertMe.Domain
 {

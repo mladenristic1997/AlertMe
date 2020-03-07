@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.Timeline", "AlertMe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.AlertSoundSelector", "AlertMe.SoundRecorder\AlertMe.AlertSoundSelector.csproj", "{06001420-8CEB-473B-BAD3-DC6424D7063B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeanutButter.Toast", "..\..\Downloads\WPF_ToastNotifications-master\PeanutButter.Toasts\PeanutButter.Toast.csproj", "{B871F316-8338-4B69-90A2-B0E3259F0E58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.Toast", "AlertMe.Toasts\AlertMe.Toast.csproj", "{B871F316-8338-4B69-90A2-B0E3259F0E58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,8 +20,9 @@
             />
             <ComboBox
                 Margin="0 10 20 10"
-                ItemsSource="{Binding Plans}"
-                SelectedItem="{Binding SelectedPlan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                IsSynchronizedWithCurrentItem="True"
+                ItemsSource="{Binding AvailablePlans}"
+                SelectedItem="{Binding SelectedPlan, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="{Binding}"
                 DisplayMemberPath="Name"
                 Height="38"

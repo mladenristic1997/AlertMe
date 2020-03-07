@@ -90,11 +90,11 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <ContentControl Margin="15" prism:RegionManager.RegionName="{x:Static local:AlertSoundSelectorRegionNames.RecordNewRegion}" />
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="0 50 0 0 "
-                    FontSize="22"
-                    Text="or" />
+                <Rectangle
+                    Width="1"
+                    Margin="0 10"
+                    Fill="Black"
+                    Grid.Column="1" />
                 <ContentControl
                     Grid.Column="2"
                     Margin="15"

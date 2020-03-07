@@ -3,6 +3,7 @@ using AlertMe.Domain.Events;
 using AlertMe.Home.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Controls;
@@ -14,10 +15,10 @@ namespace AlertMe.Home
         readonly IEventAggregator EventAggregator;
         readonly ILocalDataStore Store;
 
-        public ObservableCollection<DropdownPlan> Plans { get; set; }
+        public List<AvailableDropdownPlan> AvailablePlans { get; set; }
 
-        DropdownPlan selectedPlan;
-        public DropdownPlan SelectedPlan
+        AvailableDropdownPlan selectedPlan;
+        public AvailableDropdownPlan SelectedPlan
         {
             get => selectedPlan;
             set => SetProperty(ref selectedPlan, value);
@@ -27,7 +28,6 @@ namespace AlertMe.Home
         {
             EventAggregator = ea;
             Store = store;
-            Plans = new ObservableCollection<DropdownPlan>();
             EventAggregator.GetEvent<LoadPlans>().Subscribe(LoadStoredPlans);
             EventAggregator.GetEvent<LocalStoreChanged>().Subscribe(LoadStoredPlans);
         }
@@ -37,7 +37,7 @@ namespace AlertMe.Home
             var c = Store.GetObject<StoredAlertPlans>();
             if (c != null)
             {
-                Plans = new ObservableCollection<DropdownPlan>();
+                AvailablePlans = new List<AvailableDropdownPlan>();
                 foreach (var cfg in c.AlertPlans)
                 {
                     var cf = Store.GetObject<AlertPlan>(cfg);
@@ -53,7 +53,7 @@ namespace AlertMe.Home
                         timelineAlerts.Add(ta);
                     }
                     var vm = new PlanViewModel() { TimelineAlerts = timelineAlerts, PlanDuration = timelineAlerts.Sum(x => x.TotalSeconds) };
-                    Plans.Add(new DropdownPlan { Name = cf.Name, Plan = new PlanView { DataContext = vm } });
+                    AvailablePlans.Add(new AvailableDropdownPlan { Name = cf.Name, Plan = new PlanView { DataContext = vm } });
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace AlertMe.Home
             int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
     }
 
-    public class DropdownPlan : BindableBase
+    public class AvailableDropdownPlan : BindableBase
     {
         string name;
         public string Name
