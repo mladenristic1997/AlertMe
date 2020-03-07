@@ -12,7 +12,7 @@ namespace AlertMe.Domain
         void StoreObject<T>(T obj) where T : class;
         T GetObject<T>(string fileName) where T : class;
         void StoreObject<T>(T obj, string fileName) where T : class;
-        void RemoveObject(string fileName);
+        void RemoveDirectory(string fileName);
     }
 
     public class LocalDataStore : ILocalDataStore
@@ -69,9 +69,9 @@ namespace AlertMe.Domain
             EventAggregator.GetEvent<LocalStoreChanged>().Publish();
         }
 
-        public void RemoveObject(string fileName)
+        public void RemoveDirectory(string directoryName)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + fileName;
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + directoryName;
             var directory = new DirectoryInfo(path) { Attributes = FileAttributes.Normal };
             foreach (var childInfo in directory.GetFileSystemInfos())
                 childInfo.Delete();

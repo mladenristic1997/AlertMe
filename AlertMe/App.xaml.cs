@@ -35,6 +35,7 @@ namespace AlertMe
             containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
             containerRegistry.RegisterSingleton<ILocalDataStore, LocalDataStore>();
             containerRegistry.RegisterInstance(Container.Resolve<DialogService>());
+            containerRegistry.RegisterInstance(Container.Resolve<AppNotifier>());
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

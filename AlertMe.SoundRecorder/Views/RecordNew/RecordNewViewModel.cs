@@ -1,10 +1,14 @@
-﻿using Prism.Commands;
+﻿using AlertMe.Domain.Commands;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 
 namespace AlertMe.AlertSoundSelector
 {
     public class RecordNewViewModel : BindableBase
     {
+        readonly IEventAggregator EventAggregator;
+
         public DelegateCommand StartRecording { get; set; }
         public DelegateCommand StopRecording { get; set; }
 
@@ -29,8 +33,13 @@ namespace AlertMe.AlertSoundSelector
             set => SetProperty(ref isIdle, value);
         }
 
-        public RecordNewViewModel()
+        string AlertId { get; set; }
+        string PlanId { get; set; }
+
+        public RecordNewViewModel(IEventAggregator ea)
         {
+            EventAggregator = ea;
+            EventAggregator.GetEvent<OpenAlertSoundSelector>().Subscribe(e => { AlertId = e.AlertId; PlanId = e.PlanId; });
             StartRecording = new DelegateCommand(OnStartRecording);
             StopRecording = new DelegateCommand(OnStopRecording);
             StatusText = "Record new";

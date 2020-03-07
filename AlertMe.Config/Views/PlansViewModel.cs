@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using AlertMe.Timeline.AlertCheckpoint;
 using System;
+using AlertMe.Domain.Events;
 
 namespace AlertMe.Plans
 {
@@ -140,35 +141,37 @@ namespace AlertMe.Plans
             EventAggregator.GetEvent<AlertPlanAdded>().Publish();
         }
 
-        void OnSavePlan(AlertPlan config)
+        void OnSavePlan(AlertPlan plan)
         {
             foreach (var cfg in Plans)
             {
                 var vm = cfg.Plan.DataContext as AlertPlanViewModel;
-                if (vm.Id == config.Id)
-                    cfg.Name = config.Name;
+                if (vm.Id == plan.Id)
+                    cfg.Name = plan.Name;
             }
-            Store.StoreObject(config, config.Id);
+            Store.StoreObject(plan, plan.Id);
             var c = Store.GetObject<StoredAlertPlans>();
             if (c == null)
                 c = new StoredAlertPlans();
-            if (!c.AlertPlans.Contains(config.Id))
-                c.AlertPlans.Add(config.Id);
+            if (!c.AlertPlans.Contains(plan.Id))
+                c.AlertPlans.Add(plan.Id);
             Store.StoreObject(c);
+            EventAggregator.GetEvent<ApplicationSuccessOccured>().Publish(new ApplicationSuccessOccuredArgs { Message = $"{plan.Name} saved" });
         }
 
         void OnDeletePlan(DeleteAlertPlanArgs args)
         {
-            foreach (var config in Plans)
+            foreach (var plan in Plans)
             {
-                var vm = config.Plan.DataContext as AlertPlanViewModel;
+                var vm = plan.Plan.DataContext as AlertPlanViewModel;
                 if (vm.Id == args.Id)
                 {
-                    Plans.Remove(config);
-                    Store.RemoveObject(vm.Id);
+                    Plans.Remove(plan);
+                    Store.RemoveDirectory(vm.Id);
                     var c = Store.GetObject<StoredAlertPlans>();
                     c.AlertPlans.Remove(vm.Id);
                     Store.StoreObject(c);
+                    EventAggregator.GetEvent<ApplicationSuccessOccured>().Publish(new ApplicationSuccessOccuredArgs { Message = $"{vm.PlanName} deleted" });
                     return;
                 }
             }

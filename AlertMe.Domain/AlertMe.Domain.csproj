@@ -85,9 +85,12 @@
     <Compile Include="LocalDataStore.cs" />
     <Compile Include="Messages\Commands\CloseDialog.cs" />
     <Compile Include="Messages\Commands\OpenAlertSoundSelector.cs" />
+    <Compile Include="Messages\Events\ApplicationErrorOccured.cs" />
+    <Compile Include="Messages\Events\ApplicationSuccessOccured.cs" />
     <Compile Include="Messages\Events\LocalStoreChanged.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AppNotifier\AppNotifier.cs" />
     <Compile Include="Services\DialogService\DialogService.cs" />
     <Compile Include="Services\DialogService\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
@@ -104,6 +107,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Downloads\WPF_ToastNotifications-master\PeanutButter.Toasts\PeanutButter.Toast.csproj">
+      <Project>{b871f316-8338-4b69-90a2-b0e3259f0e58}</Project>
+      <Name>PeanutButter.Toast</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
