@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="AlertSoundSelectorModule.cs" />
     <Compile Include="Messages\Events\AlertSoundSelected.cs" />
+    <Compile Include="Messages\Events\AlertSoundSelectorClosed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AlertSoundSelectorRegionNames.cs" />
     <Compile Include="Views\RecordNew\RecordNewView.xaml.cs">

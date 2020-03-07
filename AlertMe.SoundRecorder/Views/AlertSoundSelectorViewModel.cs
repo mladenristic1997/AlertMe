@@ -112,7 +112,8 @@ namespace AlertMe.AlertSoundSelector
             IsPlaying = false;
             IsStopped = true;
             IsOpen = false; 
-            AlertSoundExists = false; 
+            AlertSoundExists = false;
+            EventAggregator.GetEvent<AlertSoundSelectorClosed>().Publish();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace AlertMe.Domain
         {
             string path = GetFilePath<T>();
             if (!File.Exists(path))
-                return default(T);
+                return default;
             string data = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<T>(data);
         }
@@ -56,7 +56,7 @@ namespace AlertMe.Domain
         {
             string path = GetFilePath(fileName);
             if (!File.Exists(path))
-                return default(T);
+                return default;
             string data = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<T>(data);
         }

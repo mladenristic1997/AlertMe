@@ -38,6 +38,7 @@ namespace AlertMe.AlertSoundSelector
                     return;
                 }
                 CopySoundFile(dialog.FileName);
+                EventAggregator.GetEvent<ApplicationSuccessOccured>().Publish(new ApplicationSuccessOccuredArgs { Message = "Alert sound added" });
                 EventAggregator.GetEvent<AlertSoundSelected>().Publish();
             }
         }

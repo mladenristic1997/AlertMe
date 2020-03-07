@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:timeline="clr-namespace:AlertMe.Timeline;assembly=AlertMe.Timeline"
     mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800">
@@ -133,23 +132,39 @@
                 Text="{Binding PlanName}" />
             <Button
                 Height="34"
-                Background="Green"
+                Cursor="Hand"
                 BorderThickness="0"
-                Command="{Binding Save}"
-                Foreground="White"
-                Padding="10 0">
-                Save
+                Command="{Binding Save}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <TextBlock 
+                        Background="Green"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Padding="8"
+                        Text="Save"/>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
         </StackPanel>
         <Button
             Height="34"
+            Cursor="Hand"
             HorizontalAlignment="Center"
-            Background="OrangeRed"
             BorderThickness="0"
             Command="{Binding Delete}"
-            Content="Delete"
-            Foreground="White"
-            Padding="10 0" />
+            Padding="10 0">
+            <Button.Template>
+                <ControlTemplate>
+                    <TextBlock 
+                        Background="OrangeRed"
+                        Foreground="White"
+                        VerticalAlignment="Center"
+                        Padding="5 8"
+                        Text="Delete"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </StackPanel>
 
 </UserControl>
