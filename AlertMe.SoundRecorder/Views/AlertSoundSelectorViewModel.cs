@@ -55,7 +55,7 @@ namespace AlertMe.AlertSoundSelector
             EventAggregator = ea;
             Player = new MediaPlayer();
             EventAggregator.GetEvent<OpenAlertSoundSelector>().Subscribe(OnOpen);
-            EventAggregator.GetEvent<AlertSoundSelected>().Subscribe(() => AlertSoundExists = true);
+            EventAggregator.GetEvent<AlertSoundSelected>().Subscribe(() => { AlertSoundExists = true; IsStopped = true; });
             CloseDialog = new DelegateCommand(OnClose);
             PlayCurrentAlertSound = new DelegateCommand(OnPlaySound);
             StopPlayingCurrentAlertSound = new DelegateCommand(OnStopPlaying);

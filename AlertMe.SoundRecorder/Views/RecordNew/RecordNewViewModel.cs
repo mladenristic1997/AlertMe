@@ -68,13 +68,6 @@ namespace AlertMe.AlertSoundSelector
             set => SetProperty(ref isIdle, value);
         }
 
-        bool hasRecorded;
-        public bool HasRecorded
-        {
-            get => hasRecorded;
-            set => SetProperty(ref hasRecorded, value);
-        }
-
         string recordedTime;
         public string RecordedTime
         {
@@ -85,6 +78,13 @@ namespace AlertMe.AlertSoundSelector
                     current.Minutes, current.Seconds, current.Milliseconds);
             }
             set => SetProperty(ref recordedTime, value);
+        }
+
+        bool isPristine;
+        public bool IsPristine
+        {
+            get => isPristine;
+            set => SetProperty(ref isPristine, value);
         }
 
         string AlertId { get; set; }
@@ -116,6 +116,7 @@ namespace AlertMe.AlertSoundSelector
             AlertId = e.AlertId; 
             PlanId = e.PlanId;
             IsIdle = true;
+            IsPristine = true;
             BeginMonitoring();
         }
 
@@ -133,7 +134,6 @@ namespace AlertMe.AlertSoundSelector
         {
             if (IsRecording)
                 OnStopRecording();
-            HasRecorded = false;
         }
 
         void OnStartRecording()
@@ -145,7 +145,6 @@ namespace AlertMe.AlertSoundSelector
             }
             IsRecording = true;
             IsIdle = false;
-            HasRecorded = true;
             StatusText = "Recording";
             var filePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/AlertMe/{PlanId}/{AlertId}";
             Recorder.BeginRecording(filePath);
@@ -153,11 +152,13 @@ namespace AlertMe.AlertSoundSelector
 
         async void OnStopRecording()
         {
-            IsRecording = false;
-            IsIdle = true;
-            StatusText = "Record new";
             Recorder.Stop();
             await TrySaveAsMp3();
+            IsRecording = false;
+            IsIdle = true;
+            IsPristine = false;
+            StatusText = "Recorded";
+            RaisePropertyChanged("RecordedTime");
             EventAggregator.GetEvent<AlertSoundSelected>().Publish();
         }
 

@@ -20,7 +20,7 @@ namespace AlertMe.AlertSoundSelector
         public AudioRecorder()
         {
             SampleAggregator = new SampleAggregator();
-            RecordingFormat = new WaveFormat(44100, 1);
+            RecordingFormat = new WaveFormat(48000, 1);
         }
 
         WaveFormat recordingFormat;
@@ -74,6 +74,11 @@ namespace AlertMe.AlertSoundSelector
             try
             {
                 var mp3FileName = FileName.Replace(".wav", ".mp3");
+                if (File.Exists(mp3FileName))
+                {
+                    var oldFile = new FileInfo(mp3FileName) { Attributes = FileAttributes.Normal };
+                        oldFile.Delete();
+                }
                 using (var reader = new AudioFileReader(FileName))
                 {
                     using (var writer = new LameMP3FileWriter(mp3FileName, reader.WaveFormat, bitRate))
@@ -86,7 +91,7 @@ namespace AlertMe.AlertSoundSelector
                 fileInfo.Delete();
                 return true;
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
