@@ -90,6 +90,7 @@ namespace AlertMe.AlertSoundSelector
                 IsPlaying = true;
                 IsStopped = false;
                 Player.Play();
+                Player.MediaEnded += (o, e) => { IsPlaying = false; IsStopped = true; };
             }
             catch
             {
