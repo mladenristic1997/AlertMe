@@ -131,7 +131,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\AlertMe.Domain\AlertMe.Domain.csproj">
       <Project>{5195ACDB-584E-4AD0-828D-5397C91DE425}</Project>

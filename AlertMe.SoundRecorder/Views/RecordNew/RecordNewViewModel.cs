@@ -7,6 +7,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AlertMe.AlertSoundSelector
@@ -74,7 +75,7 @@ namespace AlertMe.AlertSoundSelector
             get
             {
                 var current = Recorder.RecordedTime;
-                return String.Format("{0:D2}:{1:D2}.{2:D3}",
+                return string.Format("{0:D2}:{1:D2}.{2:D3}",
                     current.Minutes, current.Seconds, current.Milliseconds);
             }
             set => SetProperty(ref recordedTime, value);

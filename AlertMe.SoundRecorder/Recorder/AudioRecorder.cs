@@ -16,11 +16,12 @@ namespace AlertMe.AlertSoundSelector
         double desiredVolume = 100;
         WaveFileWriter Writer;
         string FileName { get; set; }
+        int counter = 0;
 
         public AudioRecorder()
         {
             SampleAggregator = new SampleAggregator();
-            RecordingFormat = new WaveFormat(48000, 1);
+            RecordingFormat = new WaveFormat(44100, 1);
         }
 
         WaveFormat recordingFormat;
@@ -44,6 +45,7 @@ namespace AlertMe.AlertSoundSelector
             WaveIn.DataAvailable += OnDataAvailable;
             WaveIn.RecordingStopped += OnRecordingStopped;
             WaveIn.WaveFormat = RecordingFormat;
+            WaveIn.BufferMilliseconds = 200;
             WaveIn.StartRecording();
             TryGetVolumeControl();
         }
@@ -168,6 +170,12 @@ namespace AlertMe.AlertSoundSelector
 
         void OnDataAvailable(object sender, WaveInEventArgs e)
         {
+            if (counter != 1)
+            {
+                counter++;
+                return;
+            }
+            counter = 0;
             byte[] buffer = e.Buffer;
             int bytesRecorded = e.BytesRecorded;
             WriteToFile(buffer, bytesRecorded);
