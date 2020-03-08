@@ -7,16 +7,202 @@
     xmlns:progress="clr-namespace:AlertMe.Timeline;assembly=AlertMe.Timeline"
     mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800">
+    d:DesignWidth="1200">
 
-    <Grid
-        Width="Auto"
-        Height="Auto"
-        Name="Wrapper">
-        <!--<progress:Progress
-            Alerts="{Binding TimelineAlerts}"
-            ControlWidth="{Binding ElementName=Wrapper, Path=ActualWidth}"
-            PlanDuration="{Binding PlanDuration}" />-->
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVis" />
+    </UserControl.Resources>
+
+    <Grid 
+        Margin="0 20 0 0"
+        Name="ProgressControl"
+        HorizontalAlignment="Stretch" 
+        VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button
+            Visibility="{Binding IsPaused, Converter={StaticResource boolToVis}}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Margin="0 0 45 0"
+            Width="80"
+            Height="80"
+            Command="{Binding Continue}"
+            Cursor="Hand"
+            >
+            <Button.Template>
+                <ControlTemplate>
+                    <Polygon 
+                        Points="10,0 70,40 10,80" Stroke="Green" Fill="White"
+                        />
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button
+            Visibility="{Binding IsOngoing, Converter={StaticResource boolToVis}}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Margin="0 0 45 0"
+            Width="80"
+            Height="80"
+            Command="{Binding Pause}"
+            Cursor="Hand"
+            >
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle 
+                            Stroke="Orange"
+                            Fill="White"
+                            Margin="8"
+                            />
+                        <Rectangle 
+                            Grid.Column="1"
+                            Fill="White"
+                            Stroke="Orange"
+                            Margin="8"
+                            />
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Border 
+            Width="780"
+            Height="130"
+            Grid.Column="1" 
+            BorderBrush="Black" 
+            BorderThickness="0 0 0 1">
+            <Grid HorizontalAlignment="Stretch">
+                <ItemsControl
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                    ItemsSource="{Binding AlertCheckpoints}">
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid
+                                Background="Transparent"
+                                IsEnabled="true"
+                                ScrollViewer.HorizontalScrollBarVisibility="Hidden" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Margin="{Binding Margin}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                Visibility="{Binding IsVisible, Converter={StaticResource boolToVis}}">
+                                <Rectangle
+                                    Width="2"
+                                    HorizontalAlignment="Center"
+                                    Fill="Black" />
+                                <Ellipse
+                                    Width="14"
+                                    Height="14"
+                                    VerticalAlignment="Top"
+                                    Fill="Black" />
+                                <ToolTipService.ToolTip>
+                                    <Border
+                                        Width="Auto"
+                                        Height="Auto"
+                                        Margin="-7 -5"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        Background="White"
+                                        BorderBrush="Black"
+                                        BorderThickness="1">
+                                        <StackPanel Margin="22 25">
+                                            <StackPanel
+                                                Margin="0 0 0 8"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Orientation="Horizontal">
+                                                <TextBlock FontSize="22" Text="Alerts at: " />
+                                                <TextBlock FontSize="22" Text="{Binding AlertAt}" />
+                                            </StackPanel>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontSize="22"
+                                                Text="{Binding Message}" />
+                                        </StackPanel>
+                                    </Border>
+                                </ToolTipService.ToolTip>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Rectangle 
+                    Margin="{Binding ProgressMargin}"
+                    Width="3"
+                    HorizontalAlignment="Left"
+                    Fill="MediumTurquoise"
+                    />
+            </Grid>
+        </Border>
+
+        <StackPanel
+            Grid.Column="2"
+            Height="Auto"
+            Width="Auto"
+            Margin="30 0 0 0"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <Button
+                Cursor="Hand"
+                Command="{Binding Reset}"
+                Margin="0 0 30 0"
+                VerticalAlignment="Center"
+                >
+                <Button.Template>
+                    <ControlTemplate>
+                        <Image 
+                        Height="64"
+                        Width="64"
+                        Source="pack://application:,,,/AlertMe.Home;component/Images/reset.png"
+                        />
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <StackPanel>
+                <TextBlock
+                FontSize="25"
+                FontWeight="DemiBold"
+                Text="Next Alert In:"
+                />
+                <TextBlock
+                FontSize="25"
+                FontWeight="DemiBold"
+                Text="{Binding NextAlertIn}"
+                Margin="0 0 0 30"
+                />
+                <TextBlock
+                FontSize="25"
+                FontWeight="DemiBold"
+                Text="Next Message:"
+                />
+                <TextBlock
+                FontSize="25"
+                MaxWidth="100"
+                TextWrapping="Wrap"
+                FontWeight="DemiBold"
+                Text="{Binding NextMessage}"
+                />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 
 </UserControl>

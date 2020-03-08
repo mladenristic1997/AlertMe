@@ -18,7 +18,7 @@ namespace AlertMe.Domain
             var v = new DialogWindow(EventAggregator) { DataContext = new DialogWindowViewModel(EventAggregator) };
             v.Owner = Application.Current.MainWindow;
             v.SetChildren(dialogContent);
-            v.ShowDialog();
+            v.Show();
         }
     }
 }

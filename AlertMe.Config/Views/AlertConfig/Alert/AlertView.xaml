@@ -69,7 +69,6 @@
             VerticalAlignment="Center"
             Margin="20 0"
             BorderThickness="0"
-            Background="OrangeRed"
             Cursor="Hand"
             Command="{Binding OpenSoundSelector}">
             <Button.Template>

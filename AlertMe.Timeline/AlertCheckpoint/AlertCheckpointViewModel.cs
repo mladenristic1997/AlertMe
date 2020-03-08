@@ -42,5 +42,7 @@ namespace AlertMe.Timeline.AlertCheckpoint
             get => isVisible;
             set => SetProperty(ref isVisible, value);
         }
+
+        public bool IsPassed { get; set; }
     }
 }

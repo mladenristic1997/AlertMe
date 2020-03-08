@@ -110,7 +110,6 @@
                 </ListView>
                 <Rectangle 
                     Margin="{Binding ProgressMargin}"
-                    Height="{Binding ElementName=ProgressControl, Path=ActualHeight}"
                     Width="3"
                     HorizontalAlignment="Left"
                     Fill="MediumTurquoise"

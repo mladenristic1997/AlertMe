@@ -129,7 +129,6 @@ namespace AlertMe.Plans
                 :
                 count.ToString();
 
-        //this function sux ass
             double CalculateMargin(int time, int planDuration) => Math.Round(750.0 * time / planDuration, 2);
 
             int CalculateInSeconds(int h, int m, int s) => h * 60 * 60 + m * 60 + s;
