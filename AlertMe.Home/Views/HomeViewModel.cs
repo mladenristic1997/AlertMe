@@ -1,5 +1,6 @@
 ﻿using AlertMe.Domain;
 using AlertMe.Domain.Events;
+using AlertMe.Home.Commands;
 using AlertMe.Timeline.AlertCheckpoint;
 using Prism.Events;
 using Prism.Mvvm;
@@ -37,12 +38,13 @@ namespace AlertMe.Home
 
         void OnLocalStoreChanged()
         {
+            LoadStoredPlans();
             foreach (var plan in AvailablePlans)
             {
                 var vm = plan.Plan.DataContext as PlanViewModel;
                 vm.ResetTimeline();
             }
-            LoadStoredPlans();
+            EventAggregator.GetEvent<RefreshSelection>().Publish();
         }
         
         void LoadStoredPlans()

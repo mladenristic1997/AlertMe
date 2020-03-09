@@ -29,6 +29,14 @@ namespace AlertMe.Home
             EventAggregator = ea;
             InitializeComponent();
             EventAggregator.GetEvent<LoadPlans>().Publish();
+            EventAggregator.GetEvent<RefreshSelection>().Subscribe(OnRefreshSelection);
+        }
+
+        void OnRefreshSelection()
+        {
+            var selected = Plans.SelectedIndex;
+            Plans.SelectedIndex = -1;
+            Plans.SelectedIndex = Plans.Items.Count > 0 ? selected : -1;
         }
     }
 }

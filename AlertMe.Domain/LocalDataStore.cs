@@ -38,7 +38,6 @@ namespace AlertMe.Domain
             string path = GetFilePath<T>();
             string json = JsonConvert.SerializeObject(config);
             File.WriteAllText(path, json);
-            EventAggregator.GetEvent<LocalStoreChanged>().Publish();
         }
 
         static string GetFilePath<T>()
@@ -66,17 +65,17 @@ namespace AlertMe.Domain
             string path = GetFilePath(fileName);
             string json = JsonConvert.SerializeObject(config);
             File.WriteAllText(path, json);
-            EventAggregator.GetEvent<LocalStoreChanged>().Publish();
         }
 
         public void RemoveDirectory(string directoryName)
         {
             string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/AlertMe/" + directoryName;
+            if (!Directory.Exists(path))
+                return;
             var directory = new DirectoryInfo(path) { Attributes = FileAttributes.Normal };
             foreach (var childInfo in directory.GetFileSystemInfos())
                 childInfo.Delete();
             directory.Delete();
-            EventAggregator.GetEvent<LocalStoreChanged>().Publish();
         }
 
         static string GetFilePath(string fileName)

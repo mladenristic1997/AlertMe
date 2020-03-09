@@ -1,4 +1,5 @@
 ﻿using AlertMe.Domain;
+using AlertMe.Domain.Events;
 using AlertMe.Timeline.AlertCheckpoint;
 using Prism.Commands;
 using Prism.Events;
@@ -16,12 +17,13 @@ namespace AlertMe.Home
 {
     public class PlanViewModel : BindableBase
     {
+        readonly IEventAggregator EventAggregator;
+
         Thread Progress;
         DialogService DialogService;
         MediaPlayer Player;
 
         DateTime ReferenceTime;
-        DateTime PausedAt;
         DateTime CurrentTime;
 
         public string Id { get; set; }
@@ -81,6 +83,7 @@ namespace AlertMe.Home
 
         public PlanViewModel(IEventAggregator ea)
         {
+            EventAggregator = ea;
             DialogService = new DialogService(ea);
             AlertCheckpoints = new ObservableCollection<AlertCheckpointViewModel>();
             AlertTimes = new List<int>();
@@ -90,28 +93,30 @@ namespace AlertMe.Home
             Reset = new DelegateCommand(OnReset);
             Player = new MediaPlayer();
             ReferenceTime = DateTime.Now;
-            PausedAt = DateTime.Now; 
             SetupProgressThread();
         }
 
         void SetupProgressThread()
         {
-            Progress = new Thread(new ThreadStart(Countdown));
+            Progress = new Thread(new ThreadStart(async () => await Countdown()));
             Progress.IsBackground = true;
-            Progress.SetApartmentState(ApartmentState.STA);
             Progress.Name = "ProgressBarCounterThread";
             Progress.Start();
         }
 
         void OnContinue()
         {
+            if (AlertCheckpoints.Count == 0 || PlanDuration == 0)
+            {
+                EventAggregator.GetEvent<ApplicationErrorOccured>().Publish(new ApplicationErrorOccuredArgs { Error = "There are no alerts in the selected plan.\nCheck if plan is saved." });
+                return;
+            }
             (IsOngoing, IsPaused) = (true, false);
         }
 
         void OnPause()
         {
             (IsPaused, IsOngoing) = (true, false);
-            PausedAt = DateTime.Now;
         }
 
         void OnReset()
@@ -123,22 +128,30 @@ namespace AlertMe.Home
         public void ResetTimeline()
         {
             SecondsPassed = 0;
-            (IsPaused, IsOngoing) = (true, false);
-            ReferenceTime = DateTime.Now;
-            PausedAt = DateTime.Now;
+            ProgressMargin = new Thickness(14, 0, 14, 0);
             NextAlert = AlertCheckpoints[0];
             NextMessage = NextAlert.Message;
             NextAlertIn = "";
+            foreach (var a in AlertCheckpoints)
+                a.IsPassed = false;
+            ReferenceTime = DateTime.Now;
+            LastAlertAt = 0;
+            OnPause();
         }
 
-        void Countdown()
+        async Task Countdown()
         {
             //if current seconds +-1 from an item of a list, take that item and use its index to access alert checkpoint at that index and set its isPassed to true
+            if (AlertCheckpoints.Count == 0)
+                return;
             NextAlert = AlertCheckpoints[0];
             NextMessage = NextAlert.Message;
             while (true)
             {
-                Task.Delay(1000);
+                if (SecondsPassed == PlanDuration)
+                    ResetTimeline();
+                var refTime = DateTime.Now;
+                await Task.Delay(950);
                 CurrentTime = DateTime.Now;
                 if (IsOngoing)
                 {
@@ -154,8 +167,11 @@ namespace AlertMe.Home
                         NextMessage = alert.Message;
                         PlaySound(alert.Id);
                         Application.Current.Dispatcher.Invoke(() => {
-                            var v = new MessageBoxView() { DataContext = new MessageBoxViewModel { Message = alert.Message } };
-                            DialogService.Show(v);
+                            if (!string.IsNullOrEmpty(alert.Message))
+                            {
+                                var v = new MessageBoxView() { DataContext = new MessageBoxViewModel { Message = alert.Message } };
+                                DialogService.Show(v);
+                            }
                         });
                         LastAlertAt = SecondsPassed;
                         NextAlert = AlertCheckpoints[alertHitKey];
@@ -164,9 +180,9 @@ namespace AlertMe.Home
                 }
                 else
                 {
-                    var diff = CurrentTime.Subtract(PausedAt);
-                    var d = new TimeSpan(diff.Ticks);
-                    ReferenceTime.Add(d);
+                    var diff = CurrentTime.Subtract(refTime).Milliseconds;
+                    var d = new TimeSpan(0, 0, 0, 0, diff);
+                    ReferenceTime = ReferenceTime.Add(d);
                     int seconds = 0;
                     var time = ReferenceTime;
                     foreach (var a in AlertCheckpoints)
@@ -193,8 +209,10 @@ namespace AlertMe.Home
             if (!SoundExists(alertId))
                 return;
             var path = GetSoundPathFile(alertId);
-            Player.Open(new Uri(path));
-            Player.Play();
+            Application.Current.Dispatcher.Invoke(() => { 
+                Player.Open(new Uri(path));
+                Player.Play();
+            });
         }
 
         bool SoundExists(string alertId)

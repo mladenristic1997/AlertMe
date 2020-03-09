@@ -137,11 +137,19 @@ namespace AlertMe.Plans
             var v = new AlertPlanView(EventAggregator) { DataContext = vm };
             var plan = new DropdownPlan { Plan = v, Name = NewPlanName };
             Plans.Add(plan);
+            SavePlan(new AlertPlan { Id = vm.Id, Name = vm.PlanName });
             NewPlanName = "";
             EventAggregator.GetEvent<AlertPlanAdded>().Publish();
         }
 
         void OnSavePlan(AlertPlan plan)
+        {
+            SavePlan(plan);
+            EventAggregator.GetEvent<ApplicationSuccessOccured>().Publish(new ApplicationSuccessOccuredArgs { Message = $"{plan.Name} saved" });
+            EventAggregator.GetEvent<LocalStoreChanged>().Publish();
+        }
+
+        void SavePlan(AlertPlan plan)
         {
             foreach (var cfg in Plans)
             {
@@ -156,7 +164,6 @@ namespace AlertMe.Plans
             if (!c.AlertPlans.Contains(plan.Id))
                 c.AlertPlans.Add(plan.Id);
             Store.StoreObject(c);
-            EventAggregator.GetEvent<ApplicationSuccessOccured>().Publish(new ApplicationSuccessOccuredArgs { Message = $"{plan.Name} saved" });
         }
 
         void OnDeletePlan(DeleteAlertPlanArgs args)
@@ -169,8 +176,12 @@ namespace AlertMe.Plans
                     Plans.Remove(plan);
                     Store.RemoveDirectory(vm.Id);
                     var c = Store.GetObject<StoredAlertPlans>();
-                    c.AlertPlans.Remove(vm.Id);
-                    Store.StoreObject(c);
+                    if (c != null)
+                    {
+                        c.AlertPlans.Remove(vm.Id);
+                        Store.StoreObject(c);
+                    }
+                    EventAggregator.GetEvent<LocalStoreChanged>().Publish();
                     EventAggregator.GetEvent<ApplicationSuccessOccured>().Publish(new ApplicationSuccessOccuredArgs { Message = $"{vm.PlanName} deleted" });
                     return;
                 }

@@ -10,6 +10,7 @@
         BorderThickness="1"
         Height="Auto"
         Width="Auto"
+        Padding="80"
         >
         <Grid>
             <TextBlock
