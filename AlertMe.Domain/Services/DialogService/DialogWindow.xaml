@@ -15,6 +15,7 @@
     </Window.InputBindings>
     <Grid>
         <Button
+                Click="Exit"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Command="{Binding CloseWindow}"

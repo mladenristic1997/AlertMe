@@ -12,13 +12,14 @@
         Orientation="Horizontal">
         <TextBlock 
             FontSize="18"
+            VerticalAlignment="Center"
             Text="H: "
             />
         <TextBox 
             FontSize="18"
             Margin="5 0 20 0"
             Width="60"
-            Height="Auto"
+            MaxHeight="30"
             TextWrapping="Wrap"
             PreviewTextInput="NumberValidation"
             Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}"
@@ -26,12 +27,13 @@
 
         <TextBlock 
             FontSize="18"
+            VerticalAlignment="Center"
             Text="M: "
             />
         <TextBox 
             FontSize="18"
             Width="60"
-            Height="Auto"
+            MaxHeight="30"
             TextWrapping="Wrap"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
@@ -40,12 +42,13 @@
 
         <TextBlock 
             FontSize="18"
+            VerticalAlignment="Center"
             Text="S: "
             />
         <TextBox 
             FontSize="18"
             Width="60"
-            Height="Auto"
+            MaxHeight="30"
             TextWrapping="Wrap"
             Margin="5 0 20 0"
             PreviewTextInput="NumberValidation"
@@ -54,6 +57,7 @@
 
         <TextBlock 
             FontSize="18"
+            VerticalAlignment="Center"
             Text="Message: "
             />
         <TextBox 

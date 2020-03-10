@@ -18,9 +18,9 @@ namespace AlertMe.Home
     public class PlanViewModel : BindableBase
     {
         readonly IEventAggregator EventAggregator;
+        readonly IDialogService DialogService;
 
         Thread Progress;
-        DialogService DialogService;
         MediaPlayer Player;
 
         DateTime ReferenceTime;
@@ -77,16 +77,17 @@ namespace AlertMe.Home
         public DelegateCommand Pause { get; set; }
         public DelegateCommand Reset { get; set; }
 
+        int NextAlertIndex { get; set; }
         AlertCheckpointViewModel NextAlert { get; set; }
         public ObservableCollection<AlertCheckpointViewModel> AlertCheckpoints { get; set; }
-        public List<int> AlertTimes { get; set; }
+        public Dictionary<int, AlertCheckpointViewModel> AlertTimes { get; set; }
 
-        public PlanViewModel(IEventAggregator ea)
+        public PlanViewModel(IEventAggregator ea, IDialogService ds)
         {
             EventAggregator = ea;
-            DialogService = new DialogService(ea);
+            DialogService = ds;
             AlertCheckpoints = new ObservableCollection<AlertCheckpointViewModel>();
-            AlertTimes = new List<int>();
+            AlertTimes = new Dictionary<int, AlertCheckpointViewModel>();
             IsPaused = true;
             Continue = new DelegateCommand(OnContinue);
             Pause = new DelegateCommand(OnPause);
@@ -101,6 +102,7 @@ namespace AlertMe.Home
             Progress = new Thread(new ThreadStart(async () => await Countdown()));
             Progress.IsBackground = true;
             Progress.Name = "ProgressBarCounterThread";
+            Progress.SetApartmentState(ApartmentState.STA);
             Progress.Start();
         }
 
@@ -127,11 +129,17 @@ namespace AlertMe.Home
 
         public void ResetTimeline()
         {
+            if (AlertCheckpoints.Count == 0 || PlanDuration == 0)
+            {
+                EventAggregator.GetEvent<ApplicationErrorOccured>().Publish(new ApplicationErrorOccuredArgs { Error = "There are no alerts in the selected plan.\nCheck if plan is saved." });
+                return;
+            }
             SecondsPassed = 0;
             ProgressMargin = new Thickness(14, 0, 14, 0);
             NextAlert = AlertCheckpoints[0];
             NextMessage = NextAlert.Message;
             NextAlertIn = "";
+            NextAlertIndex = 0;
             foreach (var a in AlertCheckpoints)
                 a.IsPassed = false;
             ReferenceTime = DateTime.Now;
@@ -141,11 +149,11 @@ namespace AlertMe.Home
 
         async Task Countdown()
         {
-            //if current seconds +-1 from an item of a list, take that item and use its index to access alert checkpoint at that index and set its isPassed to true
             if (AlertCheckpoints.Count == 0)
                 return;
-            NextAlert = AlertCheckpoints[0];
+            NextAlert = new AlertCheckpointViewModel { Message = AlertCheckpoints[NextAlertIndex].Message, TotalSeconds = AlertCheckpoints[NextAlertIndex].TotalSeconds };
             NextMessage = NextAlert.Message;
+            AlertTimes.Remove(SecondsPassed);
             while (true)
             {
                 if (SecondsPassed == PlanDuration)
@@ -155,16 +163,15 @@ namespace AlertMe.Home
                 CurrentTime = DateTime.Now;
                 if (IsOngoing)
                 {
-                    SecondsPassed = CurrentTime.Subtract(ReferenceTime).Seconds;
+                    SecondsPassed = (int)CurrentTime.Subtract(ReferenceTime).TotalSeconds;
                     ProgressMargin = CalculateMarginThickness(SecondsPassed);
-                    var alertHitKey = AlertHit();
-                    if (alertHitKey != -1)
+                    AlertCheckpointViewModel alert;
+                    if (AlertTimes.TryGetValue(SecondsPassed, out alert))
                     {
-                        var alert = AlertCheckpoints[alertHitKey];
                         if (alert.IsPassed)
                             continue;
                         alert.IsPassed = true;
-                        NextMessage = alert.Message;
+                        NextAlertIndex++;
                         PlaySound(alert.Id);
                         Application.Current.Dispatcher.Invoke(() => {
                             if (!string.IsNullOrEmpty(alert.Message))
@@ -174,32 +181,44 @@ namespace AlertMe.Home
                             }
                         });
                         LastAlertAt = SecondsPassed;
-                        NextAlert = AlertCheckpoints[alertHitKey];
+                        if (NextAlertIndex != AlertCheckpoints.Count)
+                        {
+                            NextAlert = new AlertCheckpointViewModel { Message = AlertCheckpoints[NextAlertIndex].Message, TotalSeconds = AlertCheckpoints[NextAlertIndex].TotalSeconds };
+                            NextMessage = NextAlert.Message;
+                        }
                     }
-                    NextAlertIn = (NextAlert.TotalSeconds - (SecondsPassed - LastAlertAt)).ToString();
+                    NextAlertIn = ParseTime(NextAlert.TotalSeconds - (SecondsPassed - LastAlertAt));
                 }
                 else
                 {
-                    var diff = CurrentTime.Subtract(refTime).Milliseconds;
+                    var diff = (int)CurrentTime.Subtract(refTime).TotalMilliseconds;
                     var d = new TimeSpan(0, 0, 0, 0, diff);
-                    ReferenceTime = ReferenceTime.Add(d);
+                    ReferenceTime = ReferenceTime.AddMilliseconds(diff);
                     int seconds = 0;
                     var time = ReferenceTime;
                     foreach (var a in AlertCheckpoints)
                     {
                         seconds += a.TotalSeconds;
-                        a.AlertAt = time.Add(new TimeSpan(0, 0, seconds)).ToShortTimeString();
+                        a.AlertAt = time.AddSeconds(seconds).ToShortTimeString();
                     }
                 }
             }
         }
 
-            int AlertHit()
+            string ParseTime(int totalSeconds)
             {
-                if (AlertTimes.IndexOf(SecondsPassed) != -1)
-                    return AlertTimes.IndexOf(SecondsPassed);
-                return -1;
+                var hours = totalSeconds / 3600;
+                totalSeconds = totalSeconds % 3600;
+                var minutes = totalSeconds / 60;
+                totalSeconds = totalSeconds % 60;
+                var seconds = totalSeconds;
+                return $"{GetTime(hours)}:{GetTime(minutes)}:{GetTime(seconds)}";
             }
+
+            string GetTime(int count) => count.ToString().Length == 1 ?
+                $"0{count}"
+                :
+                count.ToString();
 
         Thickness CalculateMarginThickness(int time) => new Thickness(CalculateMargin(time) + 14, 0, 14, 0);
         double CalculateMargin(int time) => Math.Round(750.0 * time / PlanDuration, 2);

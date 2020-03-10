@@ -96,7 +96,6 @@
     <Compile Include="Services\DialogService\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\DialogService\DialogWindowViewModel.cs" />
     <Compile Include="StoredAlertPlans.cs" />
   </ItemGroup>
   <ItemGroup>

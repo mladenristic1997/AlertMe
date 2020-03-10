@@ -21,6 +21,7 @@ namespace AlertMe
     {
         protected override Window CreateShell()
         {
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
             return ServiceLocator.Current.GetInstance<Shell.ShellView>();
         }
 
@@ -34,7 +35,7 @@ namespace AlertMe
         {
             containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
             containerRegistry.RegisterSingleton<ILocalDataStore, LocalDataStore>();
-            containerRegistry.RegisterInstance(Container.Resolve<DialogService>());
+            containerRegistry.RegisterSingleton<IDialogService, DialogService>();
             containerRegistry.RegisterInstance(Container.Resolve<AppNotifier>());
         }
 

@@ -18,6 +18,10 @@
         Name="ProgressControl"
         HorizontalAlignment="Stretch" 
         VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -153,34 +157,37 @@
             </Grid>
         </Border>
 
-        <StackPanel
+
+        <Button
             Grid.Column="2"
-            Height="Auto"
-            Width="Auto"
-            Margin="30 0 0 0"
-            Orientation="Horizontal"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
-            <Button
                 Cursor="Hand"
                 Command="{Binding Reset}"
-                Margin="0 0 30 0"
+                Margin="30 0 0 0"
                 VerticalAlignment="Center"
                 >
-                <Button.Template>
-                    <ControlTemplate>
-                        <Image 
+            <Button.Template>
+                <ControlTemplate>
+                    <Image 
                         Height="64"
                         Width="64"
                         Source="pack://application:,,,/AlertMe.Home;component/Images/reset.png"
                         />
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <StackPanel>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Height="Auto"
+            Width="Auto"
+            Margin="0 20 0 0"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <StackPanel Margin="20 0">
                 <TextBlock
                 FontSize="25"
-                FontWeight="DemiBold"
                 Text="Next Alert In:"
                 />
                 <TextBlock
@@ -189,14 +196,15 @@
                 Text="{Binding NextAlertIn}"
                 Margin="0 0 0 30"
                 />
+            </StackPanel>
+            <StackPanel Margin="20 0">
                 <TextBlock
                 FontSize="25"
-                FontWeight="DemiBold"
                 Text="Next Message:"
                 />
                 <TextBlock
                 FontSize="25"
-                MaxWidth="100"
+                MaxWidth="400"
                 TextWrapping="Wrap"
                 FontWeight="DemiBold"
                 Text="{Binding NextMessage}"

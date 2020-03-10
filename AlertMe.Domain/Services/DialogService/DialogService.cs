@@ -1,21 +1,17 @@
-﻿using Prism.Events;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace AlertMe.Domain
 {
-    public class DialogService
+    public interface IDialogService
     {
-        readonly IEventAggregator EventAggregator;
-
-        public DialogService(IEventAggregator eventAggregator)
-        {
-            EventAggregator = eventAggregator;
-        }
-
+        void Show(Control control);
+    }
+    public class DialogService : IDialogService
+    {
         public void Show(Control dialogContent)
         {
-            var v = new DialogWindow(EventAggregator) { DataContext = new DialogWindowViewModel(EventAggregator) };
+            var v = new DialogWindow();
             v.Owner = Application.Current.MainWindow;
             v.SetChildren(dialogContent);
             v.Show();

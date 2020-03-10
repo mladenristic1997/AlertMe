@@ -16,6 +16,7 @@ namespace AlertMe.Home
     public class HomeViewModel : BindableBase
     {
         readonly IEventAggregator EventAggregator;
+        readonly IDialogService DialogService;
         readonly ILocalDataStore Store;
 
         public List<AvailableDropdownPlan> AvailablePlans { get; set; }
@@ -27,9 +28,10 @@ namespace AlertMe.Home
             set => SetProperty(ref selectedPlan, value);
         }
 
-        public HomeViewModel(IEventAggregator ea, ILocalDataStore store)
+        public HomeViewModel(IEventAggregator ea, ILocalDataStore store, IDialogService ds)
         {
             EventAggregator = ea;
+            DialogService = ds;
             AvailablePlans = new List<AvailableDropdownPlan>();
             Store = store;
             LoadStoredPlans();
@@ -58,7 +60,7 @@ namespace AlertMe.Home
                     var alertPlan = Store.GetObject<AlertPlan>(plan);
                     var timelineAlerts = new ObservableCollection<Timeline.Alert>();
                     var alertCheckpoints = new ObservableCollection<AlertCheckpointViewModel>();
-                    var alertTimes = new List<int>();
+                    var alertTimes = new Dictionary<int, AlertCheckpointViewModel>();
                     foreach (var alert in alertPlan.Alerts)
                     {
                         var ta = new Timeline.Alert
@@ -73,36 +75,21 @@ namespace AlertMe.Home
                     foreach (var a in timelineAlerts)
                     {
                         seconds += a.TotalSeconds;
-                        alertTimes.Add(seconds);
                         var ac = new AlertCheckpointViewModel();
                         ac.Id = a.Id;
                         ac.Message = a.Message;
-                        ac.AlertAt = ParseTime(seconds);
+                        ac.AlertAt = DateTime.Now.AddSeconds(seconds).ToShortTimeString();
                         ac.TotalSeconds = a.TotalSeconds;
                         ac.IsVisible = ac.TotalSeconds != 0;
                         ac.Margin = new Thickness(CalculateMargin(seconds, timelineAlerts.Sum(x => x.TotalSeconds)) + 14, 0, 14, 0);
                         alertCheckpoints.Add(ac);
+                        alertTimes.Add(seconds, ac);
                     }
-                    var vm = new PlanViewModel(EventAggregator) { Id = alertPlan.Id, AlertCheckpoints = alertCheckpoints, AlertTimes = alertTimes, ProgressMargin = new Thickness(14, 0, 14, 0), PlanDuration = timelineAlerts.Sum(x => x.TotalSeconds) };
+                    var vm = new PlanViewModel(EventAggregator, DialogService) { Id = alertPlan.Id, AlertCheckpoints = alertCheckpoints, AlertTimes = alertTimes, ProgressMargin = new Thickness(14, 0, 14, 0), PlanDuration = timelineAlerts.Sum(x => x.TotalSeconds) };
                     AvailablePlans.Add(new AvailableDropdownPlan { Name = alertPlan.Name, Plan = new PlanView { DataContext = vm } });
                 }
             }
         }
-
-            string ParseTime(int totalSeconds)
-            {
-                var hours = totalSeconds / 3600;
-                totalSeconds = totalSeconds % 3600;
-                var minutes = totalSeconds / 60;
-                totalSeconds = totalSeconds % 60;
-                var seconds = totalSeconds;
-                return $"{GetTime(hours)}:{GetTime(minutes)}:{GetTime(seconds)}";
-            }
-
-            string GetTime(int count) => count.ToString() == string.Empty ?
-                "00"
-                :
-                count.ToString();
 
             double CalculateMargin(int time, int planDuration) => Math.Round(750.0 * time / planDuration, 2);
 

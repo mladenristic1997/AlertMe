@@ -22,14 +22,10 @@ namespace AlertMe.Domain
     /// </summary>
     public partial class DialogWindow : Window
     {
-        readonly IEventAggregator EventAggregator;
-
-        public DialogWindow(IEventAggregator eventAggregator)
+        public DialogWindow()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             SizeToContent = SizeToContent.WidthAndHeight;
-            EventAggregator = eventAggregator;
-            EventAggregator.GetEvent<CloseDialog>().Subscribe(OnCloseDialogRequested);
             InitializeComponent();
         }
 
@@ -38,9 +34,8 @@ namespace AlertMe.Domain
             ContentGrid.Children.Add(child);
         }
 
-        void OnCloseDialogRequested()
+        private void Exit(object sender, RoutedEventArgs e)
         {
-            EventAggregator.GetEvent<CloseDialog>().Unsubscribe(OnCloseDialogRequested);
             ContentGrid.Children.Clear();
             Close();
         }

@@ -6,6 +6,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:domain="clr-namespace:AlertMe.Domain;assembly=AlertMe.Domain"
              Title="AlertMe"
+             Closed="Window_Closed"
              mc:Ignorable="d"
              MouseDown="Window_MouseDown"
              WindowState="Maximized"
