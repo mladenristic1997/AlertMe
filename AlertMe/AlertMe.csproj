@@ -135,6 +135,10 @@
       <Project>{335FABF9-A39F-4192-A291-92521AF5BA18}</Project>
       <Name>AlertMe.Home</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AlertMe.Rain\AlertMe.Rain.csproj">
+      <Project>{755D42F0-30FB-49B5-BB4E-092AABDC5A72}</Project>
+      <Name>AlertMe.Rain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AlertMe.Shell\AlertMe.Shell.csproj">
       <Project>{04b2c5c5-e445-403d-8f8e-8b763ca73aef}</Project>
       <Name>AlertMe.Shell</Name>

@@ -12,6 +12,7 @@ using Alert = AlertMe.Domain.Alert;
 using System.Linq;
 using AlertMe.Timeline.AlertCheckpoint;
 using System;
+using AlertMe.Domain.Events;
 
 namespace AlertMe.Plans
 {
@@ -136,9 +137,10 @@ namespace AlertMe.Plans
         void OnAddNewAlert()
         {
             var id = IdProvider.GetId();
-            Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id, PlanId = Id } });
+            Alerts.Add(new AlertView { DataContext = new AlertViewModel(EventAggregator) { Id = id, PlanId = Id, Seconds = 1 } });
             TimelineAlerts.Add(new Timeline.Alert { Id = id });
-            AlertCheckpoints.Add(new AlertCheckpointViewModel { Id = id, IsVisible = false });
+            AlertCheckpoints.Add(new AlertCheckpointViewModel { Id = id });
+            OnAlertChanged(new AlertChangedArgs { Id = id, Seconds = 1 });
         }
 
         void OnRemoveAlert(RemoveAlertArgs args)
@@ -188,7 +190,16 @@ namespace AlertMe.Plans
 
         void OnSave()
         {
-            var plan = new AlertPlan { Id = Id, Name = PlanName, Alerts = GetAlertObjects() };
+            var alerts = GetAlertObjects();
+            foreach (var a in alerts)
+            {
+                if (CalculateInSeconds(a.Hours, a.Minutes, a.Seconds) == 0)
+                {
+                    EventAggregator.GetEvent<ApplicationErrorOccured>().Publish(new ApplicationErrorOccuredArgs { Error = "Can't save plan that contains alert with no duration" });
+                    return;
+                }
+            }
+            var plan = new AlertPlan { Id = Id, Name = PlanName, Alerts = alerts };
             EventAggregator.GetEvent<SaveAlertPlan>().Publish(plan);
         }
 

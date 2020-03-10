@@ -2,6 +2,7 @@
 using AlertMe.Domain;
 using AlertMe.Home;
 using AlertMe.Plans;
+using AlertMe.Rain;
 using CommonServiceLocator;
 using Prism.Events;
 using Prism.Ioc;
@@ -44,6 +45,7 @@ namespace AlertMe
             AddModule(moduleCatalog, typeof(HomeModule));
             AddModule(moduleCatalog, typeof(PlansModule));
             AddModule(moduleCatalog, typeof(AlertSoundSelectorModule));
+            AddModule(moduleCatalog, typeof(RainModule));
             base.ConfigureModuleCatalog(moduleCatalog);
         }
 

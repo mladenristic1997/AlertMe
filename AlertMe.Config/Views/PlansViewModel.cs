@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using AlertMe.Timeline.AlertCheckpoint;
 using System;
 using AlertMe.Domain.Events;
+using AlertMe.Domain.Commands;
 
 namespace AlertMe.Plans
 {

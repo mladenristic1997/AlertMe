@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.AlertSoundSelector"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.Toast", "AlertMe.Toasts\AlertMe.Toast.csproj", "{B871F316-8338-4B69-90A2-B0E3259F0E58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMe.Rain", "AlertMe.Rain\AlertMe.Rain.csproj", "{755D42F0-30FB-49B5-BB4E-092AABDC5A72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{B871F316-8338-4B69-90A2-B0E3259F0E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B871F316-8338-4B69-90A2-B0E3259F0E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B871F316-8338-4B69-90A2-B0E3259F0E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{755D42F0-30FB-49B5-BB4E-092AABDC5A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{755D42F0-30FB-49B5-BB4E-092AABDC5A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{755D42F0-30FB-49B5-BB4E-092AABDC5A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{755D42F0-30FB-49B5-BB4E-092AABDC5A72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{20AF35AA-A0C4-4AAC-959D-2DE2B422F87F} = {F2F9A391-708C-4A3A-A191-916B9A02F538}
 		{06001420-8CEB-473B-BAD3-DC6424D7063B} = {F2F9A391-708C-4A3A-A191-916B9A02F538}
 		{B871F316-8338-4B69-90A2-B0E3259F0E58} = {F2F9A391-708C-4A3A-A191-916B9A02F538}
+		{755D42F0-30FB-49B5-BB4E-092AABDC5A72} = {F2F9A391-708C-4A3A-A191-916B9A02F538}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E72D61BB-7D25-4603-860A-7116EC076865}
