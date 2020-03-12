@@ -21,9 +21,8 @@ namespace AlertMe.Rain
     /// </summary>
     public partial class Droplet : UserControl
     {
-        public double RotationAngle { get; set; }
-        public double FallingSpeed { get; set; }
-        public RotationOrientation RotationOrientation { get; set; }
+        int AnimationDuration = 2;
+        public double ScreenHeight { get; set; }
         public string ImagePath { get; set; }
         public Thickness ImagePosition { get; set; }
 
@@ -39,31 +38,10 @@ namespace AlertMe.Rain
             DropletImage.UpdateLayout();
         }
 
-        public void UpdatePosition()
+        public void BeginAnimation()
         {
-            var currentY = DropletImage.Margin.Top;
-            var currentX = DropletImage.Margin.Left;
-            DropletImage.Margin = new Thickness(currentX, currentY + FallingSpeed, 0, 0);
-            SkewTransform currentAngle = DropletImage.RenderTransform as SkewTransform;
-            if (RotationOrientation == RotationOrientation.Clockwise)
-            {
-                var rotateAnimation = new DoubleAnimation(currentAngle.AngleX, currentAngle.AngleX + RotationAngle, new TimeSpan(0, 0, 0, 0, 16));
-                var rt = (RotateTransform)DropletImage.RenderTransform;
-                rt.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
-            }
-            else
-            {
-                var rotateAnimation = new DoubleAnimation(currentAngle.AngleX, currentAngle.AngleX - RotationAngle, new TimeSpan(0, 0, 0, 0, 16));
-                var rt = (RotateTransform)DropletImage.RenderTransform;
-                rt.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
-            }
-            DropletImage.UpdateLayout();
+            ThicknessAnimation translate = new ThicknessAnimation(ImagePosition, new Thickness(ImagePosition.Left, ScreenHeight, 0, 0), TimeSpan.FromSeconds(AnimationDuration));
+            DropletImage.BeginAnimation(MarginProperty, translate);
         }
-    }
-
-    public enum RotationOrientation
-    {
-        Clockwise = 0,
-        CounterClockwise = 1
     }
 }

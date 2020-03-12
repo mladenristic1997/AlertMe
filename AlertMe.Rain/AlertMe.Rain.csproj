@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="RainModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransformationExtentions.cs" />
     <Compile Include="Views\Droplet\Droplet.xaml.cs">
       <DependentUpon>Droplet.xaml</DependentUpon>
     </Compile>

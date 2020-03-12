@@ -22,16 +22,14 @@ namespace AlertMe.Rain
     /// </summary>
     public partial class OverlayView : UserControl
     {
-        IEventAggregator EventAggregator;
         MediaPlayer Player;
         Random Random;
         List<Droplet> Droplets = new List<Droplet>();
         TimeSpan FrameDuration = new TimeSpan(0, 0, 0, 0, 16);
         bool AnimationInProgress;
 
-        public OverlayView(IEventAggregator ea)
+        public OverlayView()
         {
-            EventAggregator = ea;
             Player = new MediaPlayer();
             Random = new Random();
             Player.MediaEnded += OnMediaEnded;
@@ -49,15 +47,14 @@ namespace AlertMe.Rain
                 return;
             MakeItRainBtn.Visibility = Visibility.Collapsed;
             AnimationInProgress = true;
-            //Player.Open(new Uri(Environment.CurrentDirectory + "/Resources/rainingmen.mp3", UriKind.Relative));
-            //Player.Play();
+            Player.Open(new Uri(Environment.CurrentDirectory + "/Resources/rainingmen.mp3", UriKind.Relative));
+            Player.Play();
             Droplets = new List<Droplet>();
             int generationCounter = 0;
             while (AnimationInProgress)
             {
                 if (generationCounter % 4 == 0)
                     AddNewDroplets();
-                UpdateWorld();
                 generationCounter++;
                 await Task.Delay(FrameDuration);
             }
@@ -69,35 +66,25 @@ namespace AlertMe.Rain
             {
                 var x = Math.Round(Random.NextDouble() * Overlay.ActualWidth, 2);
                 var margin = new Thickness(x, 0, 0, 0);
-                var fallingSpeed = 2 + ((int)(Random.NextDouble() * 2 * 100) / 100.0);
-                var rotationAngle = 6 + Math.Round(Random.NextDouble() * 3, 2);
-                var rotationOrientation = (RotationOrientation)Random.Next(0, 2);
                 var imagePath = Random.Next(0, 2) == 0 ? "pack://application:,,,/AlertMe.Rain;component/Resources/heart.png" : "pack://application:,,,/AlertMe.Rain;component/Resources/mladen.png";
                 var droplet = new Droplet
                 {
                     ImagePosition = margin,
-                    FallingSpeed = fallingSpeed,
-                    RotationAngle = rotationAngle,
-                    RotationOrientation = rotationOrientation,
-                    ImagePath = imagePath
+                    ImagePath = imagePath,
+                    ScreenHeight = Overlay.ActualHeight
                 };
                 droplet.Init();
                 Droplets.Add(droplet);
                 Overlay.Children.Add(droplet);
+                droplet.BeginAnimation();
             }
         }
 
-        public void UpdateWorld()
-        {
-            foreach (var d in Droplets)
-                d.UpdatePosition();
-            Overlay.UpdateLayout();
-        }
-
-        void OnMediaEnded(object o, EventArgs e)
+        async void OnMediaEnded(object o, EventArgs e)
         {
             AnimationInProgress = false; 
             Droplets.Clear();
+            await Task.Delay(2000);
             Overlay.Children.Clear();
             MakeItRainBtn.Visibility = Visibility.Visible;
         }
