@@ -5,12 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Height="Auto" Width="Auto" Background="Transparent">
+    <Grid HorizontalAlignment="Left"
+          VerticalAlignment="Top">
         <Image 
+            Stretch="Fill"
             Name="DropletImage"
             Height="100"
-            Width="100"
-            Source="{Binding ImagePath}"
-            />
+            Width="100" RenderTransformOrigin="0.5,0.5"
+            >
+        </Image>
     </Grid>
 </UserControl>

@@ -105,12 +105,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\mladen.png" />
     <Content Include="Resources\rainingmen.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\mladen.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\heart.png" />
