@@ -107,9 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\mladen.png" />
-    <Content Include="Resources\rainingmen.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Resources\rainingmen.mp3" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\heart.png" />
